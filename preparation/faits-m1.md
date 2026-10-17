@@ -36,3 +36,11 @@ Rejeu : `python3 scripts/valider-labs.py --lab <id>` (clean, socle, run, check, 
 - Un apprenant réel : aucun essai humain, le temps réel (30 à 40 min annoncées) n'est pas mesuré.
 - Le rejeu sur un poste sans cache uv (premier `uv add` : réseau PyPI, durée non mesurée à froid).
 - Ordre L2 puis L3 enchaînés sur le même bucket : chaque rejeu repart d'un bucket vide (`down -v`).
+
+## Rejeu des gestes ajoutés aux leçons (2026-10-17, dvc 3.67.1, projet jetable du scratchpad)
+
+1. `dvc.lock` : `schema: '2.0'`, `hash: md5`, `md5`, `size`, `params: params.yaml: donnees.graine: 42` conformes à l'extrait de L3. Écarts : DVC replie `cmd` sur deux lignes (`--sortie` / `data/metriques.csv` à la ligne), trie `deps` par chemin (data/metriques.csv avant train.py) et les clés de `params` par ordre alphabétique ; `metrics.json` figure dans `outs` avec son md5 malgré `cache: false`.
+2. Clone vierge : `uv sync --locked`, `dvc pull` (« 1 file fetched and 1 file added »), `dvc repro --force` rejoue `donnees` puis `entrainer` (rmse 23.31, r2 0.7813), `git diff metrics.json` : 0 ligne, `git status` propre.
+3. `dvc cache dir` = `<projet>/.dvc/cache` (défaut). `git checkout <v1>` + `dvc checkout` : « M data/metriques.csv », SHA 550be1a3 ; `git switch -` : « Switched to branch 'main' » ; `dvc checkout` : SHA 65e665e5, branche main.
+4. Sortie en double : `ERROR: output 'data/metriques.csv' is specified in:` / `- donnees` / `- data/metriques.csv.dvc` / `Use dvc remove with any of the above targets to stop tracking the overlapping output.` (rc 255). `dvc remove data/metriques.csv.dvc` (rc 0) : le CSV reste, `data/.gitignore` disparaît, le pointeur est supprimé (à commiter) ; `dvc repro` passe ensuite.
+5. `dvc add` quand le `.gitignore` racine ignore déjà le CSV : succès sans message d'erreur, mais `data/.gitignore` n'est PAS écrit ; ensuite `git add data/.gitignore` donne `fatal: pathspec 'data/.gitignore' did not match any files`. Idem pour `metrics.json` ignoré à la racine (`git add` refuse). Parade : retirer ces deux lignes du `.gitignore` racine avant `dvc add` / avant le commit du pipeline. Rejoué avec cette parade : les `git add` des pages passent. La suppression du pointeur doit être ajoutée au commit (`git add data/metriques.csv.dvc` enregistre la suppression).
