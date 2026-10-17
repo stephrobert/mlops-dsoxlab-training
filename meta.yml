@@ -46,13 +46,13 @@ sections:
     description: "Structure a reproducible ML project, version data with DVC and S3 storage, track runs with MLflow, manage a model registry, and test data and model."
     labs:
       - m1-projet-reproductible
+      - m1-dvc-donnees
+      - m1-dvc-pipeline
   - id: m2-livrer
     title: "Level 2: ship"
     description: "Package a model, serve it with KServe on kind, run a canary, build the model CI/CD and retrain continuously."
-    labs:
-      - m1-dvc-donnees
+    labs: []
   - id: m3-exploiter
     title: "Level 3: operate"
     description: "Observe the inference service, detect drift in production, roll back to a healthy model and document the model."
-    labs:
-      - m1-dvc-pipeline
+    labs: []
