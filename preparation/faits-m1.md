@@ -52,3 +52,7 @@ Rejeu : `python3 scripts/valider-labs.py --lab <id>` (clean, socle, run, check, 
 - Clone vierge des deux cas : `uv sync --locked`, `dvc pull` (« 1 file fetched and 1 file added »), `dvc repro --force`, rmse 23.31 / r2 0.7813, `git diff metrics.json` : 0 ligne.
 - Dépannage « sorties absentes » : sur un clone SANS `dvc pull` (cache vide, bucket garni), `dvc status` dit `not in cache: data/metriques.csv`, et `dvc repro` NE PLANTE PAS : `Running stage 'donnees'` régénère le CSV (déterministe), `Stage 'entrainer' didn't change, skipping`, rc 0. Avec le CSV supprimé mais le cache présent : `Stage 'donnees' is cached - skipping run, checking out outputs`.
 - `dvc params diff` après n_arbres 50 vers 60 : `params.yaml  entrainement.n_arbres  50  60`. `dvc metrics diff` : `r2 0.78135 -> 0.78608 (0.00473)`, `rmse 23.31062 -> 23.05688 (-0.25374)`.
+
+## Dossier data/ absent (2026-10-17)
+
+Dans un workdir neuf de `m1-projet-reproductible` et de `m1-dvc-donnees` (après `dsoxlab run`, pas de `data/`), `python3 genere-metriques.py --graine 42 --lignes 5000 --sortie data/metriques.csv` échoue : `FileNotFoundError: [Errno 2] No such file or directory: 'data/metriques.csv'`. Après `mkdir -p data` : SHA-256 `550be1a31a70...`. Les tests des deux labs ne supposent pas un `data/` préexistant (les solutions font `mkdir -p data`). `dvc pull` = fetch + checkout (« 1 file fetched and 1 file added »). Aucune question de `exams/mlops.json` ne contredit cette formulation (lignes 451-454, 488-496 vérifiées).
