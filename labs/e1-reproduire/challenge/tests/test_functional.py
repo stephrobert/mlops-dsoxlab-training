@@ -209,9 +209,10 @@ def test_la_suite_refuse_un_rmse_au_dessus_du_seuil_versionne(tmp_path: Path) ->
         en="seuils.yaml and the tests/ folder must be committed.",
         fr="seuils.yaml et le dossier tests/ doivent être versionnés.")
     m = re.search(r"^rmse_max:\s*([0-9.]+)", (P / "seuils.yaml").read_text(), re.M)
-    assert m and 23.4 <= float(m.group(1)) <= 28.0, message(
-        en="seuils.yaml must define rmse_max, between 23.4 and 28.0.",
-        fr="seuils.yaml doit définir rmse_max, entre 23,4 et 28,0.")
+    mesure = json.loads((P / "metrics.json").read_text())["rmse"]
+    assert m and mesure < float(m.group(1)) <= 28.0, message(
+        en=f"seuils.yaml must define rmse_max, above the RMSE of your metrics.json ({mesure:.2f}) so that your model passes, and at most 28.0.",
+        fr=f"seuils.yaml doit définir rmse_max, au-dessus de la RMSE de votre metrics.json ({mesure:.2f}) pour que votre modèle passe, et au plus 28,0.")
     assert "seuils.yaml" in "".join(p.read_text() for p in (P / "tests").glob("*.py")), message(
         en="The tests must read the threshold from seuils.yaml.", fr="Les tests doivent lire le seuil dans seuils.yaml.")
     mauvais = tmp_path / "metrics-degrade.json"

@@ -31,7 +31,7 @@ the parameters of `params.yaml` left unchanged:
    `DONNEES` (default `data/metriques.csv`) and the metrics from `METRIQUES`
    (default `metrics.json`), and fails on `casse-schema.csv` (missing
    columns) and on a metrics file whose `rmse` exceeds `rmse_max`, a
-   threshold read from the versioned file `seuils.yaml` (at most `28.0`). It
+   threshold read from the versioned file `seuils.yaml`, one that lets your model pass and at most `28.0`. It
    passes on the repository's own data and metrics.
 
 ## What is graded

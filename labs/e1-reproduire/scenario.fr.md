@@ -32,8 +32,8 @@ Dans `projet/`, commité dans Git (l'arbre de travail doit être propre), graine
    `DONNEES` (défaut `data/metriques.csv`) et les métriques dans `METRIQUES`
    (défaut `metrics.json`), et échoue sur `casse-schema.csv` (colonnes
    manquantes) comme sur un fichier de métriques dont le `rmse` dépasse
-   `rmse_max`, un seuil lu dans le fichier versionné `seuils.yaml` (au plus
-   `28.0`). Elle passe sur les données et les métriques du dépôt.
+   `rmse_max`, un seuil lu dans le fichier versionné `seuils.yaml`, qui laisse passer votre
+   modèle et au plus `28.0`. Elle passe sur les données et les métriques du dépôt.
 
 ## Ce qui est noté
 
