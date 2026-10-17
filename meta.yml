@@ -49,7 +49,8 @@ sections:
   - id: m2-livrer
     title: "Level 2: ship"
     description: "Package a model, serve it with KServe on kind, run a canary, build the model CI/CD and retrain continuously."
-    labs: []
+    labs:
+      - m1-dvc-donnees
   - id: m3-exploiter
     title: "Level 3: operate"
     description: "Observe the inference service, detect drift in production, roll back to a healthy model and document the model."

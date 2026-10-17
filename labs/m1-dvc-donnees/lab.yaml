@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/stephrobert/dsoxlab/main/schemas/lab.schema.json
+id: m1-dvc-donnees
+title: "Get back the exact version of a dataset"
+description: |
+  The dataset was regenerated last week and nobody kept the previous one: the
+  model trained on it can no longer be rebuilt. Put the data under DVC with an
+  S3 remote (Garage), keep two versions, and prove a clean clone gets the exact
+  bytes back, in any version. Graded on the Git repository, the bucket content
+  and file fingerprints, never on the commands typed.
+section: m1-reproduire
+level: m1
+lab_type: lab
+difficulty: beginner
+estimated_time: "40m"
+skills:
+  - dvc
+  - s3
+  - git
+distros:
+  - any
+doc_url: https://blog.stephane-robert.info/docs/mlops/versionner-donnees-dvc/
+runtime:
+  type: shell
+  workdir: challenge/work
+  fixtures:
+    - .gitignore
+    - pyproject.toml
+    - genere-metriques.py
+validation:
+  functional: true
+  security: false
+  persistence_after_reboot: false

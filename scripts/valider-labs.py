@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -46,13 +47,15 @@ def etape(msg: str) -> None:
 def joue(lab: str) -> bool:
     d = RACINE / "labs" / lab
     work = d / "challenge" / "work"
+    fiche = RACINE / "preparation" / "fiches" / f"{lab}.md"
+    socle = fiche.exists() and "S3" in fiche.read_text()
     t0 = time.time()
     dso("clean", lab)
-    if (d / "cleanup.sh").exists():
-        subprocess.run(["bash", str(d / "cleanup.sh")], cwd=RACINE)
-    if (d / "setup.sh").exists():
+    if socle:
+        subprocess.run(["bash", str(RACINE / "scripts" / "socle-arreter.sh")], cwd=RACINE)
+    if socle:
         etape("setup.sh")
-        subprocess.run(["bash", str(d / "setup.sh")], cwd=RACINE, check=True)
+        subprocess.run(["bash", str(RACINE / "scripts" / "socle-demarrer.sh")], cwd=RACINE, check=True)
     dso("run", lab)
     avant = score(lab)
     etape(f"sans solution : {avant} (attendu 0)")
@@ -64,12 +67,12 @@ def joue(lab: str) -> bool:
                  str(RACINE / ".vault-pass"), "--output", f"{tmp}/{f.name}", str(f)],
                 check=True, capture_output=True,
             )
-        r = subprocess.run(["bash", f"{tmp}/solution.sh"], cwd=work)
+        r = subprocess.run(["bash", f"{tmp}/solution.sh"], cwd=work, env={**os.environ, "MLOPS_RACINE": str(RACINE)})
     etape(f"solution.sh rc={r.returncode} en {time.time() - t1:.0f}s")
     apres = score(lab)
     etape(f"avec solution : {apres} (attendu 100)")
-    if (d / "cleanup.sh").exists():
-        subprocess.run(["bash", str(d / "cleanup.sh")], cwd=RACINE)
+    if socle:
+        subprocess.run(["bash", str(RACINE / "scripts" / "socle-arreter.sh")], cwd=RACINE)
     dso("clean", lab)
     ok = avant == 0 and apres == 100
     etape(f"{lab} : {'VALIDE' if ok else 'ROUGE'} ({time.time() - t0:.0f}s)")

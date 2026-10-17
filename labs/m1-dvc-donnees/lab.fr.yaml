@@ -1,0 +1,9 @@
+# Surcharge française : `title` et `description` seulement.
+title: "Retrouver la version exacte d'un jeu de données"
+description: |
+  Le jeu de données a été régénéré la semaine dernière et personne n'a gardé le
+  précédent : le modèle entraîné dessus ne peut plus être reconstruit. Placez
+  les données sous DVC avec un remote S3 (Garage), gardez deux versions et
+  prouvez qu'un clone vierge retrouve les octets exacts, dans chaque version.
+  Noté sur le dépôt Git, le contenu du bucket et les empreintes des fichiers,
+  jamais sur les commandes tapées.
