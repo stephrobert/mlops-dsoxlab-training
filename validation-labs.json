@@ -18,7 +18,7 @@
    "score": 0,
    "total": 5
   },
-  "commit": "d04e262",
+  "commit": "6a0c8e0",
   "date": "2026-10-17",
   "duree_s": 18,
   "ecarts": [],
@@ -64,9 +64,9 @@
    "score": 0,
    "total": 4
   },
-  "commit": "d04e262",
+  "commit": "6a0c8e0",
   "date": "2026-10-17",
-  "duree_s": 29,
+  "duree_s": 28,
   "ecarts": [],
   "etapes": [
    "socle S3 (Garage) démarré, bucket vide",
@@ -83,6 +83,51 @@
     "test_pipeline_decrit_et_depot_propre",
     "test_rien_a_rejouer_et_donnees_dans_le_bucket",
     "test_un_parametre_ne_rejoue_que_son_etape"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 4
+  },
+  "uv": "0.12.10",
+  "verdict": "VALIDE"
+ },
+ "m1-mlflow-serveur": {
+  "apres": {
+   "echecs": [],
+   "passed": 4,
+   "score": 100,
+   "total": 4
+  },
+  "avant": {
+   "echecs": [
+    "test_metadonnees_dans_postgresql",
+    "test_modele_de_chaque_run_dans_le_bucket",
+    "test_run_du_modele_v1_retrouve",
+    "test_runs_avec_parametres_metriques_commit_et_empreinte"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 4
+  },
+  "commit": "6a0c8e0",
+  "date": "2026-10-17",
+  "duree_s": 36,
+  "ecarts": [],
+  "etapes": [
+   "socle S3 (Garage) démarré, bucket vide",
+   "avant le travail : 0/4",
+   "après la solution : 4/4",
+   "après clean et run : 0/4",
+   "poste rendu intact"
+  ],
+  "python": "3.12.13",
+  "raisons": [],
+  "rejeu": {
+   "echecs": [
+    "test_metadonnees_dans_postgresql",
+    "test_modele_de_chaque_run_dans_le_bucket",
+    "test_run_du_modele_v1_retrouve",
+    "test_runs_avec_parametres_metriques_commit_et_empreinte"
    ],
    "passed": 0,
    "score": 0,
@@ -111,7 +156,7 @@
    "score": 0,
    "total": 6
   },
-  "commit": "d04e262",
+  "commit": "6a0c8e0",
   "date": "2026-10-17",
   "duree_s": 18,
   "ecarts": [],
@@ -136,6 +181,98 @@
    "passed": 0,
    "score": 0,
    "total": 6
+  },
+  "uv": "0.12.10",
+  "verdict": "VALIDE"
+ },
+ "m1-registre-alias": {
+  "apres": {
+   "echecs": [],
+   "passed": 4,
+   "score": 100,
+   "total": 4
+  },
+  "avant": {
+   "echecs": [
+    "test_alias_champion_et_challenger_sur_les_bonnes_versions",
+    "test_aucun_stage_utilise",
+    "test_deux_versions_enregistrees_depuis_deux_runs",
+    "test_predire_charge_par_alias_sans_chemin"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 4
+  },
+  "commit": "6a0c8e0",
+  "date": "2026-10-17",
+  "duree_s": 38,
+  "ecarts": [],
+  "etapes": [
+   "socle S3 (Garage) démarré, bucket vide",
+   "avant le travail : 0/4",
+   "après la solution : 4/4",
+   "après clean et run : 0/4",
+   "poste rendu intact"
+  ],
+  "python": "3.12.13",
+  "raisons": [],
+  "rejeu": {
+   "echecs": [
+    "test_alias_champion_et_challenger_sur_les_bonnes_versions",
+    "test_aucun_stage_utilise",
+    "test_deux_versions_enregistrees_depuis_deux_runs",
+    "test_predire_charge_par_alias_sans_chemin"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 4
+  },
+  "uv": "0.12.10",
+  "verdict": "VALIDE"
+ },
+ "m1-tests-modele": {
+  "apres": {
+   "echecs": [],
+   "passed": 5,
+   "score": 100,
+   "total": 5
+  },
+  "avant": {
+   "echecs": [
+    "test_la_suite_passe_sur_donnees_et_modele_valides",
+    "test_la_suite_refuse_les_donnees_cassees",
+    "test_la_suite_refuse_un_modele_moins_bon_que_le_champion",
+    "test_la_suite_refuse_un_modele_sous_le_seuil",
+    "test_seuil_lu_dans_un_fichier_versionne"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 5
+  },
+  "commit": "6a0c8e0",
+  "date": "2026-10-17",
+  "duree_s": 27,
+  "ecarts": [],
+  "etapes": [
+   "socle S3 (Garage) démarré, bucket vide",
+   "avant le travail : 0/5",
+   "après la solution : 5/5",
+   "après clean et run : 0/5",
+   "poste rendu intact"
+  ],
+  "python": "3.12.13",
+  "raisons": [],
+  "rejeu": {
+   "echecs": [
+    "test_la_suite_passe_sur_donnees_et_modele_valides",
+    "test_la_suite_refuse_les_donnees_cassees",
+    "test_la_suite_refuse_un_modele_moins_bon_que_le_champion",
+    "test_la_suite_refuse_un_modele_sous_le_seuil",
+    "test_seuil_lu_dans_un_fichier_versionne"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 5
   },
   "uv": "0.12.10",
   "verdict": "VALIDE"
