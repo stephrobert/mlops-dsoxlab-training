@@ -12,7 +12,7 @@ Créer les 19 labs de la fiche `fiches/`, un par un, dans l'ordre des leçons. *
 - Chaque lab se joue dans les deux sens : `dsoxlab check` rend 0 avant le travail, 100 après la solution ; `dsoxlab clean` ne laisse rien.
 - Notation sur l'état réel du système, jamais sur les commandes tapées.
 - Images épinglées par `image:tag@sha256:...`. Aucun `:latest`.
-- Aucun service tiers hors images de conteneurs et paquets déclarés. Rien de Claude dans le catalogue (ni CLAUDE.md, ni Co-Authored-By).
+- Aucun service tiers hors images de conteneurs et paquets déclarés. Aucune mention d'un assistant de rédaction dans le catalogue : ni fichier de consignes d'agent, ni ligne de co-auteur.
 - Pas de push : la livraison est un geste de Stéphane.
 
 ## Socle fourni
