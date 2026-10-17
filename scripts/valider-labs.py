@@ -98,6 +98,8 @@ def joue(lab: str) -> dict:
         res["apres"] = check(lab)
         res["etapes"].append(f"après la solution : {res['apres']['passed']}/{res['apres']['total']}")
         dso("clean", lab)
+        if besoin:
+            socle("arreter"); socle("demarrer")  # bucket vidé, comme un poste neuf
         dso("run", lab)
         res["rejeu"] = check(lab)
         res["etapes"].append(f"après clean et run : {res['rejeu']['passed']}/{res['rejeu']['total']}")
