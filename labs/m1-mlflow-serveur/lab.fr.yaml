@@ -1,0 +1,10 @@
+# Surcharge française : `title` et `description` seulement.
+title: "Retrouver le run qui a produit un modèle avec un serveur MLflow"
+description: |
+  Un script d'entraînement ne garde aucune trace de ses essais. Branchez-le
+  sur un serveur MLflow adossé à PostgreSQL et au bucket S3 du socle,
+  journalisez paramètres, métriques, modèle, commit Git et empreinte des
+  données, puis retrouvez le run qui a produit le modèle d'une version
+  donnée. Noté sur les runs présents dans le serveur, les fichiers du modèle
+  dans le bucket et les lignes dans PostgreSQL, jamais sur les commandes
+  tapées.

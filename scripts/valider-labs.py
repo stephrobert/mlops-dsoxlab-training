@@ -46,14 +46,19 @@ def check(lab: str) -> dict:
             "total": c["total"]}
 
 
-def socle(action: str) -> None:
-    subprocess.run(["bash", str(RACINE / "scripts" / f"socle-{action}.sh")],
+# Labs qui ont besoin du serveur MLflow et de PostgreSQL en plus de Garage.
+AVEC_MLFLOW = {"m1-mlflow-serveur", "m1-registre-alias"}
+
+
+def socle(action: str, lab: str = "") -> None:
+    args = ["mlflow"] if action == "demarrer" and lab in AVEC_MLFLOW else []
+    subprocess.run(["bash", str(RACINE / "scripts" / f"socle-{action}.sh"), *args],
                    cwd=RACINE, check=True, capture_output=True)
 
 
 def a_besoin_du_socle(lab: str) -> bool:
     fiche = RACINE / "preparation" / "fiches" / f"{lab}.md"
-    return fiche.exists() and "S3" in fiche.read_text()
+    return lab in AVEC_MLFLOW or (fiche.exists() and "S3" in fiche.read_text())
 
 
 def conteneurs() -> int:
@@ -87,7 +92,7 @@ def joue(lab: str) -> dict:
     try:
         dso("clean", lab)
         if besoin:
-            socle("arreter"); socle("demarrer")
+            socle("arreter"); socle("demarrer", lab)
             res["etapes"].append("socle S3 (Garage) démarré, bucket vide")
         dso("run", lab)
         res["avant"] = check(lab)
@@ -99,7 +104,7 @@ def joue(lab: str) -> dict:
         res["etapes"].append(f"après la solution : {res['apres']['passed']}/{res['apres']['total']}")
         dso("clean", lab)
         if besoin:
-            socle("arreter"); socle("demarrer")  # bucket vidé, comme un poste neuf
+            socle("arreter"); socle("demarrer", lab)  # bucket vidé, comme un poste neuf
         dso("run", lab)
         res["rejeu"] = check(lab)
         res["etapes"].append(f"après clean et run : {res['rejeu']['passed']}/{res['rejeu']['total']}")

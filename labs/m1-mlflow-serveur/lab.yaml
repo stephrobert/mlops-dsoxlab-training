@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/stephrobert/dsoxlab/main/schemas/lab.schema.json
+id: m1-mlflow-serveur
+title: "Find which run produced a model with an MLflow server"
+description: |
+  A training script keeps no trace of its attempts. Plug it into an MLflow
+  server backed by PostgreSQL and the S3 bucket of the stack, log parameters,
+  metrics, the model, the Git commit and the data fingerprint, then find the
+  run that produced the model of a given version. Graded on the runs stored
+  on the server, the model files in the bucket and the rows in PostgreSQL,
+  never on the commands typed.
+section: m1-reproduire
+level: m1
+lab_type: lab
+difficulty: intermediate
+estimated_time: "40m"
+skills:
+  - mlflow
+  - ml-reproductibilite
+  - uv
+distros:
+  - any
+doc_url: https://blog.stephane-robert.info/docs/mlops/mlflow-suivi/
+runtime:
+  type: shell
+  workdir: challenge/work
+  fixtures:
+    - .gitignore
+    - pyproject.toml
+    - params.yaml
+    - train.py
+    - genere-metriques.py
+validation:
+  functional: true
+  security: false
+  persistence_after_reboot: false

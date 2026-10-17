@@ -1,0 +1,7 @@
+donnees:
+  graine: 42
+  lignes: 5000
+entrainement:
+  seed: 42
+  n_arbres: 50
+  part_test: 0.2
