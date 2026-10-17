@@ -1,0 +1,9 @@
+# Surcharge française : `title` et `description` seulement.
+title: "Désigner un modèle par alias dans le registre MLflow"
+description: |
+  Deux entraînements laissent deux modèles identifiés par des ids opaques.
+  Enregistrez-les dans le registre MLflow, pointez les alias champion et
+  challenger sur les bonnes versions, puis chargez un modèle par alias sans
+  aucun chemin dans le code. Noté sur les versions et alias tenus par le
+  serveur, leur lignée jusqu'aux runs et un script qui charge réellement le
+  modèle, jamais sur les commandes tapées.

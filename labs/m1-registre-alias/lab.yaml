@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/stephrobert/dsoxlab/main/schemas/lab.schema.json
+id: m1-registre-alias
+title: "Designate a model by alias in the MLflow registry"
+description: |
+  Two trainings leave two models identified by opaque ids. Register them in
+  the MLflow registry, point the aliases champion and challenger at the right
+  versions, then load a model by alias with no path in the code. Graded on
+  the versions and aliases held by the server, their lineage back to the
+  runs, and a script that really loads the model, never on the commands
+  typed.
+section: m1-reproduire
+level: m1
+lab_type: lab
+difficulty: intermediate
+estimated_time: "35m"
+skills:
+  - mlflow
+  - ml-reproductibilite
+distros:
+  - any
+doc_url: https://blog.stephane-robert.info/docs/mlops/registre-modeles/
+runtime:
+  type: shell
+  workdir: challenge/work
+  fixtures:
+    - .gitignore
+    - pyproject.toml
+    - params.yaml
+    - train.py
+    - genere-metriques.py
+validation:
+  functional: true
+  security: false
+  persistence_after_reboot: false
