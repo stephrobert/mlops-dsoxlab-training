@@ -1,0 +1,143 @@
+{
+ "m1-dvc-donnees": {
+  "apres": {
+   "echecs": [],
+   "passed": 5,
+   "score": 100,
+   "total": 5
+  },
+  "avant": {
+   "echecs": [
+    "test_clone_vierge_restitue_le_jeu_courant",
+    "test_donnees_suivies_par_dvc_pas_par_git",
+    "test_dvc_status_propre_et_pousse",
+    "test_empreinte_dans_le_bucket",
+    "test_version_anterieure_retrouvable"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 5
+  },
+  "commit": "d04e262",
+  "date": "2026-10-17",
+  "duree_s": 18,
+  "ecarts": [],
+  "etapes": [
+   "socle S3 (Garage) démarré, bucket vide",
+   "avant le travail : 0/5",
+   "après la solution : 5/5",
+   "après clean et run : 0/5",
+   "poste rendu intact"
+  ],
+  "python": "3.12.13",
+  "raisons": [],
+  "rejeu": {
+   "echecs": [
+    "test_clone_vierge_restitue_le_jeu_courant",
+    "test_donnees_suivies_par_dvc_pas_par_git",
+    "test_dvc_status_propre_et_pousse",
+    "test_empreinte_dans_le_bucket",
+    "test_version_anterieure_retrouvable"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 5
+  },
+  "uv": "0.12.10",
+  "verdict": "VALIDE"
+ },
+ "m1-dvc-pipeline": {
+  "apres": {
+   "echecs": [],
+   "passed": 4,
+   "score": 100,
+   "total": 4
+  },
+  "avant": {
+   "echecs": [
+    "test_clone_vierge_memes_metriques",
+    "test_pipeline_decrit_et_depot_propre",
+    "test_rien_a_rejouer_et_donnees_dans_le_bucket",
+    "test_un_parametre_ne_rejoue_que_son_etape"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 4
+  },
+  "commit": "d04e262",
+  "date": "2026-10-17",
+  "duree_s": 29,
+  "ecarts": [],
+  "etapes": [
+   "socle S3 (Garage) démarré, bucket vide",
+   "avant le travail : 0/4",
+   "après la solution : 4/4",
+   "après clean et run : 0/4",
+   "poste rendu intact"
+  ],
+  "python": "3.12.13",
+  "raisons": [],
+  "rejeu": {
+   "echecs": [
+    "test_clone_vierge_memes_metriques",
+    "test_pipeline_decrit_et_depot_propre",
+    "test_rien_a_rejouer_et_donnees_dans_le_bucket",
+    "test_un_parametre_ne_rejoue_que_son_etape"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 4
+  },
+  "uv": "0.12.10",
+  "verdict": "VALIDE"
+ },
+ "m1-projet-reproductible": {
+  "apres": {
+   "echecs": [],
+   "passed": 6,
+   "score": 100,
+   "total": 6
+  },
+  "avant": {
+   "echecs": [
+    "test_deux_entrainements_memes_metriques",
+    "test_donnees_exactes",
+    "test_environnement_verrouille",
+    "test_graine_dans_la_configuration",
+    "test_la_graine_pilote_vraiment_les_metriques",
+    "test_projet_versionne_et_propre"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 6
+  },
+  "commit": "d04e262",
+  "date": "2026-10-17",
+  "duree_s": 18,
+  "ecarts": [],
+  "etapes": [
+   "socle S3 (Garage) démarré, bucket vide",
+   "avant le travail : 0/6",
+   "après la solution : 6/6",
+   "après clean et run : 0/6",
+   "poste rendu intact"
+  ],
+  "python": "3.12.13",
+  "raisons": [],
+  "rejeu": {
+   "echecs": [
+    "test_deux_entrainements_memes_metriques",
+    "test_donnees_exactes",
+    "test_environnement_verrouille",
+    "test_graine_dans_la_configuration",
+    "test_la_graine_pilote_vraiment_les_metriques",
+    "test_projet_versionne_et_propre"
+   ],
+   "passed": 0,
+   "score": 0,
+   "total": 6
+  },
+  "uv": "0.12.10",
+  "verdict": "VALIDE"
+ }
+}
