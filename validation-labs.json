@@ -2,12 +2,13 @@
  "e1-reproduire": {
   "apres": {
    "echecs": [],
-   "passed": 9,
+   "passed": 11,
    "score": 100,
-   "total": 9
+   "total": 11
   },
   "avant": {
    "echecs": [
+    "test_aucune_cle_d_acces_dans_la_config_dvc_versionnee",
     "test_clone_vierge_pipeline_redonne_la_metrique",
     "test_depot_propre_et_dvc_status_synchronise",
     "test_empreinte_des_donnees_dans_le_stockage_s3",
@@ -16,27 +17,29 @@
     "test_la_suite_refuse_un_candidat_moins_bon_que_le_champion",
     "test_la_suite_refuse_un_rmse_au_dessus_du_seuil_versionne",
     "test_modele_enregistre_avec_l_alias_challenger",
+    "test_pipeline_decrit_deux_etapes_avec_dependances_et_params",
     "test_run_mlflow_termine_avec_commit_et_empreinte"
    ],
    "passed": 0,
    "score": 0,
-   "total": 9
+   "total": 11
   },
-  "commit": "6722277",
+  "commit": "52b6579",
   "date": "2026-10-17",
-  "duree_s": 53,
+  "duree_s": 52,
   "ecarts": [],
   "etapes": [
    "socle S3 (Garage) démarré, bucket vide",
-   "avant le travail : 0/9",
-   "après la solution : 9/9",
-   "après clean et run : 0/9",
+   "avant le travail : 0/11",
+   "après la solution : 11/11",
+   "après clean et run : 0/11",
    "poste rendu intact"
   ],
   "python": "3.12.13",
   "raisons": [],
   "rejeu": {
    "echecs": [
+    "test_aucune_cle_d_acces_dans_la_config_dvc_versionnee",
     "test_clone_vierge_pipeline_redonne_la_metrique",
     "test_depot_propre_et_dvc_status_synchronise",
     "test_empreinte_des_donnees_dans_le_stockage_s3",
@@ -45,11 +48,12 @@
     "test_la_suite_refuse_un_candidat_moins_bon_que_le_champion",
     "test_la_suite_refuse_un_rmse_au_dessus_du_seuil_versionne",
     "test_modele_enregistre_avec_l_alias_challenger",
+    "test_pipeline_decrit_deux_etapes_avec_dependances_et_params",
     "test_run_mlflow_termine_avec_commit_et_empreinte"
    ],
    "passed": 0,
    "score": 0,
-   "total": 9
+   "total": 11
   },
   "uv": "0.12.10",
   "verdict": "VALIDE"
