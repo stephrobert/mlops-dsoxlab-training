@@ -19,7 +19,7 @@ skills:
   - uv
 distros:
   - any
-doc_url: https://blog.stephane-robert.info/docs/mlops/mlflow-suivi/
+doc_url: https://blog.stephane-robert.info/docs/mlops/mlflow/
 runtime:
   type: shell
   workdir: challenge/work
