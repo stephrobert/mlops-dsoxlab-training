@@ -54,4 +54,5 @@ sections:
   - id: m3-exploiter
     title: "Level 3: operate"
     description: "Observe the inference service, detect drift in production, roll back to a healthy model and document the model."
-    labs: []
+    labs:
+      - m1-dvc-pipeline

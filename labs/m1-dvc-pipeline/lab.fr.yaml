@@ -1,0 +1,9 @@
+# Surcharge française : `title` et `description` seulement.
+title: "Rejouer un entraînement par un pipeline DVC"
+description: |
+  La génération des données et l'entraînement sont deux scripts lancés à la
+  main, dans un ordre que personne n'a écrit. Décrivez-les en pipeline DVC,
+  rejouez-le sur un clone vierge pour obtenir les mêmes métriques, puis
+  vérifiez qu'un paramètre modifié ne rejoue que l'étape qu'il touche. Noté
+  sur dvc.yaml, le bucket, les métriques et ce que DVC rejoue réellement,
+  jamais sur les commandes tapées.
