@@ -17,7 +17,7 @@ Candidat non essayé : chrislusf/seaweedfs:4.48@sha256:4e61d15fd35994cb1e43e1e55
 Garage a passé les deux essais réels. SeaweedFS n'a PAS été essayé (Garage suffisait au critère « les deux premiers essais passent ») : la comparaison n'est donc pas faite, elle reste à faire si l'on veut un second choix.
 
 - MLflow : l'image `-full` est nécessaire (l'image sans suffixe n'embarque pas psycopg2 ni boto3 ; la `-full` contient psycopg2 2.9.13 et boto3 1.43.112). Serveur lancé avec `--artifacts-destination s3://mlflow-artefacts/ --serve-artifacts` ; le run `b2f62a32...` a son artefact vu dans le bucket : `1/<run>/artifacts/artefact-essai.txt`. `artifact_uri` côté client : `mlflow-artifacts:/1/<run>/artifacts` (le client passe par le serveur).
-- DVC : `dvc remote add -d stockage s3://dvc-donnees`, `endurl` = `endpointurl http://127.0.0.1:3900`, `region garage`. `dvc push` : 1 file pushed ; `dvc pull` sur un clone Git vierge : 1 file fetched ; SHA-256 identique avant et après (550be1a3...) ; `dvc status` : « Data and pipelines are up to date ».
+- DVC : `dvc remote add -d stockage s3://dvc-donnees`, `endpointurl http://127.0.0.1:3900`, `region garage`. `dvc push` : 1 file pushed ; `dvc pull` sur un clone Git vierge : 1 file fetched ; SHA-256 identique avant et après (550be1a3...) ; `dvc status` : « Data and pipelines are up to date ».
 - Initialiseur de stockage KServe : NON ESSAYÉ (KServe ne se joue pas à cette étape) et documentation non consultée. À vérifier : KServe lit un S3 par `storage-initializer` avec un endpoint personnalisé (secret annoté `serving.kserve.io/s3-endpoint`).
 
 ## Pièges rencontrés
