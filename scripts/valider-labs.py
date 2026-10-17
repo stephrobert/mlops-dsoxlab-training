@@ -47,7 +47,7 @@ def check(lab: str) -> dict:
 
 
 # Labs qui ont besoin du serveur MLflow et de PostgreSQL en plus de Garage.
-AVEC_MLFLOW = {"m1-mlflow-serveur", "m1-registre-alias"}
+AVEC_MLFLOW = {"m1-mlflow-serveur", "m1-registre-alias", "e1-reproduire"}
 
 
 def socle(action: str, lab: str = "") -> None:

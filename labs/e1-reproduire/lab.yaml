@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/stephrobert/dsoxlab/main/schemas/lab.schema.json
+id: e1-reproduire
+title: "Exam: make a model reproducible and traceable"
+description: |
+  You receive the starting repository of the thread: a data generator, a
+  training script and its parameters, and nothing else. Deliver a model
+  anyone can rebuild and trace: versioned data in the S3 store, a pipeline
+  that replays to the same metric on a fresh clone, a run on the MLflow
+  server that carries the commit and the data fingerprint, the model
+  registered with the alias challenger, and a pytest suite that refuses the
+  broken dataset provided and a model above the metric threshold. Graded as
+  a black box on the state of the repository and of the servers, without
+  hints.
+section: level-exams
+level: m1
+difficulty: intermediate
+lab_type: challenge
+exam_passing_score: 70
+estimated_time: 45m
+skills:
+  - dvc
+  - mlflow
+  - pytest
+  - ml-reproductibilite
+  - uv
+distros:
+  - any
+# Provisoire : la page de fin de M1. L'emplacement definitif se decide avec le site.
+doc_url: https://blog.stephane-robert.info/docs/mlops/tests-modele/
+runtime:
+  type: shell
+  workdir: challenge/work
+  # Le point de depart : le depot du fil rouge en bundle et le jeu au schema
+  # casse a refuser.
+  fixtures:
+    - depot.bundle
+    - casse-schema.csv
+validation:
+  functional: true
+  security: false
+  persistence_after_reboot: false

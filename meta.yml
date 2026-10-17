@@ -51,6 +51,13 @@ sections:
       - m1-mlflow-serveur
       - m1-registre-alias
       - m1-tests-modele
+  # Epreuve de fin du niveau m1 : une MESURE, pas un cours, notee sur l'etat du
+  # systeme, sans indice.
+  - id: level-exams
+    title: "Level exams"
+    description: "End-of-level exams: a measure, not a course. Graded as a black box on the state of the system, without hints."
+    labs:
+      - e1-reproduire
   - id: m2-livrer
     title: "Level 2: ship"
     description: "Package a model, serve it with KServe on kind, run a canary, build the model CI/CD and retrain continuously."

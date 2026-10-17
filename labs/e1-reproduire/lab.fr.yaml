@@ -1,0 +1,11 @@
+# Surcharge française : `title` et `description` seulement.
+title: "Épreuve : rendre un modèle reproductible et traçable"
+description: |
+  Vous recevez le dépôt de départ du fil rouge : un générateur de données, un
+  script d'entraînement et ses paramètres, rien d'autre. Livrez un modèle que
+  n'importe qui peut reconstruire et tracer : des données versionnées dans le
+  stockage S3, un pipeline qui redonne la même métrique sur un clone vierge,
+  un run sur le serveur MLflow qui porte le commit et l'empreinte des données,
+  le modèle enregistré avec l'alias challenger, et une suite pytest qui refuse
+  le jeu cassé fourni et un modèle au-dessus du seuil de métrique. Noté en
+  boîte noire sur l'état du dépôt et des serveurs, sans indice.
