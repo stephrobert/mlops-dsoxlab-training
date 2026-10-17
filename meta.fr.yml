@@ -1,0 +1,29 @@
+# Surcharge française du catalogue. Elle ne porte QUE `repo.title`,
+# `repo.description`, et les `title` / `description` des sections, appariés
+# par `id` et non par position. L'anglais vit dans `meta.yml`.
+
+repo:
+  title: "Formation MLOps : reproduire, livrer et exploiter un modèle"
+  description: |
+    Les labs de la formation MLOps. Un seul fil rouge : un générateur seedé de
+    métriques de services (CPU, mémoire, requêtes, erreurs, latence) alimente
+    un modèle qui prédit la latence ou un incident, et une dérive peut être
+    injectée à la demande. Le niveau 1 rend un modèle reproductible (DVC avec
+    stockage S3, suivi et registre MLflow, tests). Le niveau 2 le livre
+    (KServe sur kind, canary, CI/CD du modèle, entraînement continu). Le
+    niveau 3 l'exploite (observabilité, détection de dérive, retour arrière,
+    carte de modèle).
+
+    Chaque lab est noté sur l'état du système, jamais sur les commandes
+    tapées. Tout tourne sur un poste avec Docker, kind et act.
+
+sections:
+  - id: m1-reproduire
+    title: "Niveau 1 : reproduire"
+    description: "Structurer un projet ML reproductible, versionner les données avec DVC et un stockage S3, suivre les runs avec MLflow, gérer un registre de modèles, tester données et modèle."
+  - id: m2-livrer
+    title: "Niveau 2 : livrer"
+    description: "Empaqueter un modèle, le servir avec KServe sur kind, conduire un canary, construire la CI/CD du modèle et réentraîner en continu."
+  - id: m3-exploiter
+    title: "Niveau 3 : exploiter"
+    description: "Observer le service d'inférence, détecter la dérive en production, revenir à un modèle sain et documenter le modèle."

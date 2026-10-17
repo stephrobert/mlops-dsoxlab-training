@@ -1,0 +1,55 @@
+# Catalogue mlops-dsoxlab-training, décrit par le contrat v1 de dsoxlab.
+#
+# `repo.id` sert de clé pour l'état local de ce catalogue : le changer
+# déplace ces emplacements.
+schema_version: 1
+
+repo:
+  id: mlops-dsoxlab-training
+  category: mlops
+  title: "MLOps Training: reproduce, ship and operate a model"
+  blog_url: "https://blog.stephane-robert.info/docs/mlops/"
+  issues_url: "https://github.com/stephrobert/mlops-dsoxlab-training/issues"
+  description: |
+    Labs for the MLOps course. One thread throughout: a seeded generator of
+    service metrics (CPU, memory, requests, errors, latency) feeds a model that
+    predicts latency or an incident, and a drift can be injected on demand.
+    Level one makes a model reproducible (DVC with S3 storage, MLflow tracking
+    and registry, tests). Level two ships it (KServe on kind, canary, model
+    CI/CD, continuous training). Level three operates it (observability, drift
+    detection, rollback, model card).
+
+    Every lab is graded on the state of the system, never on the commands
+    typed. Everything runs on one workstation with Docker, kind and act.
+
+# Où remettre une preuve d'apprentissage, si ce catalogue a un portail. En
+# `https` : le lien porte les résultats d'un apprenant. dsoxlab n'envoie rien —
+# il affiche une adresse, et l'apprenant décide.
+#
+# learning:
+#   portal_url: https://formation.example.org/mon-apprentissage/
+
+# Un catalogue sans lab `vm` n'a pas besoin de bloc `infra:`. Décommente-le le
+# jour où un lab déclare `runtime.type: vm`.
+#
+# infra:
+#   provider: kvm
+#   network: mlops-dsoxlab-training-net
+#   cidr: 10.10.10.0/24
+#   hosts:
+#     - name: hote.lab
+#       distro: alma10
+
+sections:
+  - id: m1-reproduire
+    title: "Level 1: reproduce"
+    description: "Structure a reproducible ML project, version data with DVC and S3 storage, track runs with MLflow, manage a model registry, and test data and model."
+    labs: []
+  - id: m2-livrer
+    title: "Level 2: ship"
+    description: "Package a model, serve it with KServe on kind, run a canary, build the model CI/CD and retrain continuously."
+    labs: []
+  - id: m3-exploiter
+    title: "Level 3: operate"
+    description: "Observe the inference service, detect drift in production, roll back to a healthy model and document the model."
+    labs: []

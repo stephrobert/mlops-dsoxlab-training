@@ -1,0 +1,50 @@
+# Socle des labs MLOps : PostgreSQL (métadonnées MLflow), Garage (S3) et le
+# serveur MLflow. Tout est local (127.0.0.1) et jetable. Les secrets viennent
+# de `.env`, généré par `genere-env.sh`. PostgreSQL n'est pas publié sur
+# l'hôte et n'accepte que le réseau interne du projet Compose, d'où
+# l'authentification `trust` : aucun mot de passe à fuiter.
+name: mlops-socle
+
+services:
+  postgres:
+    image: postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+    environment:
+      POSTGRES_USER: mlflow
+      POSTGRES_DB: mlflow
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mlflow -d mlflow"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  garage:
+    image: dxflrs/garage:v2.4.1@sha256:9c96caa2612d3411acc5b0e6701fb238dbfba33e533a6d7d3d811a4b12d0d020
+    environment:
+      GARAGE_RPC_SECRET: ${GARAGE_RPC_SECRET}
+      GARAGE_ADMIN_TOKEN: ${GARAGE_ADMIN_TOKEN}
+    volumes:
+      - ./garage.toml:/etc/garage.toml:ro
+    ports:
+      - "127.0.0.1:3900:3900"
+      - "127.0.0.1:3903:3903"
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.17.1-full@sha256:190306b1739b9646d6d39333594334b69ba14ab843db927712c790b50892f262
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: garage
+      MLFLOW_S3_ENDPOINT_URL: http://garage:3900
+    command: >
+      mlflow server
+      --host 0.0.0.0 --port 5000
+      --backend-store-uri postgresql://mlflow@postgres:5432/mlflow
+      --artifacts-destination s3://mlflow-artefacts/
+      --serve-artifacts
+      --allowed-hosts "*"
+    ports:
+      - "127.0.0.1:5000:5000"
