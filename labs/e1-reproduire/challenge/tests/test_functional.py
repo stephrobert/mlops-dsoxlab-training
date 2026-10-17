@@ -98,6 +98,11 @@ def run_trace(r: dict) -> bool:
     csv = P / "data" / "metriques.csv"
     if not csv.exists():
         return False
+    # Un run d'une tentative précédente survit à `dsoxlab clean` (le serveur n'est pas
+    # touché) : seuls comptent les runs lancés après la création du répertoire de travail.
+    debut_ms = (W / "depot.bundle").stat().st_ctime * 1000
+    if int(r["info"].get("start_time", 0)) < debut_ms:
+        return False
     commits = set(run(["git", "rev-list", "--all"]).stdout.split())
     t = tags(r)
     params = {p["key"] for p in r["data"].get("params", [])}
@@ -164,6 +169,40 @@ def test_clone_vierge_pipeline_redonne_la_metrique(tmp_path: Path) -> None:
         fr=f"Le clone ne donne pas les métriques attendues (RMSE 23,31, R2 0,7813) : {obtenu}")
 
 
+def test_pipeline_decrit_deux_etapes_avec_dependances_et_params() -> None:
+    import yaml
+
+    exiger_depot()
+    try:
+        etapes = (yaml.safe_load((P / "dvc.yaml").read_text()) or {}).get("stages", {})
+    except OSError:
+        etapes = {}
+    assert {"donnees", "entrainer"} <= set(etapes), message(
+        en=f"dvc.yaml must describe the stages donnees and entrainer (found {sorted(etapes)}).",
+        fr=f"dvc.yaml doit décrire les étapes donnees et entrainer (trouvé {sorted(etapes)}).")
+    ent, don = etapes["entrainer"], etapes["donnees"]
+    assert "data/metriques.csv" in (ent.get("deps") or []), message(
+        en="The stage entrainer must depend on data/metriques.csv.",
+        fr="L'étape entrainer doit dépendre de data/metriques.csv.")
+    assert any(str(x).split(".")[0] == "entrainement" for x in (ent.get("params") or [])), message(
+        en="The stage entrainer must declare its parameters (entrainement, or entrainement.seed...).",
+        fr="L'étape entrainer doit déclarer ses paramètres (entrainement, ou entrainement.seed...).")
+    assert "data/metriques.csv" in (don.get("outs") or []) and (don.get("params") or []), message(
+        en="The stage donnees must output data/metriques.csv and declare its parameters.",
+        fr="L'étape donnees doit produire data/metriques.csv et déclarer ses paramètres.")
+
+
+def test_aucune_cle_d_acces_dans_la_config_dvc_versionnee() -> None:
+    exiger_depot()
+    config = run(["git", "show", "HEAD:.dvc/config"])
+    assert config.returncode == 0 and "s3://dvc-donnees" in config.stdout, message(
+        en="The committed .dvc/config must declare the remote s3://dvc-donnees (the root of the bucket).",
+        fr="Le .dvc/config versionné doit déclarer le remote s3://dvc-donnees (la racine du bucket).")
+    assert not re.search(r"access_key|secret_access|session_token", config.stdout, re.I), message(
+        en="The committed .dvc/config holds an access key: keys belong to the environment.",
+        fr="Le .dvc/config versionné contient une clé d'accès : les clés restent dans l'environnement.")
+
+
 def test_run_mlflow_termine_avec_commit_et_empreinte() -> None:
     exiger_depot()
     assert any(run_trace(r) for r in runs_termines()), message(
@@ -203,6 +242,7 @@ def copie_avec_seuils(tmp: Path, **valeurs: float) -> Path:
 
     import yaml
 
+    tmp.mkdir(parents=True, exist_ok=True)
     c = tmp / "copie"
     shutil.copytree(P, c, ignore=shutil.ignore_patterns(".venv", ".git", "__pycache__", ".pytest_cache"))
     seuils = yaml.safe_load((c / "seuils.yaml").read_text())
@@ -241,8 +281,11 @@ def test_la_suite_refuse_un_rmse_au_dessus_du_seuil_versionne(tmp_path: Path) ->
     assert m and mesure < float(m.group(1)) <= 28.0, message(
         en=f"seuils.yaml must define rmse_max, above the RMSE of your metrics.json ({mesure:.2f}) so that your model passes, and at most 28.0.",
         fr=f"seuils.yaml doit définir rmse_max, au-dessus de la RMSE de votre metrics.json ({mesure:.2f}) pour que votre modèle passe, et au plus 28,0.")
-    assert "seuils.yaml" in "".join(p.read_text() for p in (P / "tests").glob("*.py")), message(
-        en="The tests must read the threshold from seuils.yaml.", fr="Les tests doivent lire le seuil dans seuils.yaml.")
+    # Comportement : un rmse_max abaissé sous la RMSE du dépôt doit faire échouer la suite.
+    c = copie_avec_seuils(tmp_path / "bas", rmse_max=20.0)
+    exiger_refus(suite(P / "data" / "metriques.csv", P / "metrics.json", cwd=c),
+                 "the repository's metrics once rmse_max is lowered to 20 (the threshold must be read from seuils.yaml)",
+                 "les métriques du dépôt quand rmse_max est abaissé à 20 (le seuil doit être lu dans seuils.yaml)")
     mauvais = tmp_path / "metrics-degrade.json"
     mauvais.write_text(json.dumps({"rmse": 40.0, "r2": 0.1}))
     # tolérance au champion relevée à 100 : seul le seuil absolu peut refuser.
@@ -259,8 +302,11 @@ def test_la_suite_refuse_un_candidat_moins_bon_que_le_champion(tmp_path: Path) -
     assert isinstance(seuils.get("tolerance_ms"), (int, float)) and seuils["tolerance_ms"] >= 0, message(
         en="seuils.yaml must define tolerance_ms, the versioned tolerance against the champion.",
         fr="seuils.yaml doit définir tolerance_ms, la tolérance versionnée face au champion.")
-    assert "tolerance_ms" in "".join(p.read_text() for p in (P / "tests").glob("*.py")), message(
-        en="The tests must read tolerance_ms from seuils.yaml.", fr="Les tests doivent lire tolerance_ms dans seuils.yaml.")
+    # Comportement : une tolérance abaissée à 0,5 ms (le dépôt est à 0,9 ms du champion) doit refuser.
+    c = copie_avec_seuils(tmp_path / "tol", tolerance_ms=0.5)
+    exiger_refus(suite(P / "data" / "metriques.csv", P / "metrics.json", cwd=c),
+                 "the repository's metrics once tolerance_ms is lowered to 0.5 (the tolerance must be read from seuils.yaml)",
+                 "les métriques du dépôt quand tolerance_ms est abaissé à 0,5 (la tolérance doit être lue dans seuils.yaml)")
     moins_bon = tmp_path / "metrics-moins-bon.json"
     moins_bon.write_text(json.dumps({"rmse": 25.5, "r2": 0.7}))
     # seuil absolu relevé à 100 : seule la comparaison au champion peut refuser.

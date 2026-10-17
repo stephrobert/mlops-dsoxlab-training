@@ -16,14 +16,17 @@ repository is the bundle `depot.bundle`: clone it with
 In `projet/`, committed in Git (the working tree must be clean), seed 42 and
 the parameters of `params.yaml` left unchanged:
 
-1. the data is versioned by DVC and pushed to the S3 store; `dvc status` is
-   clean and the store is in sync;
+1. the data is versioned by DVC and pushed to the S3 store, whose remote is the
+   root of the bucket `dvc-donnees`; the committed `.dvc/config` holds no access
+   key (the keys stay in the environment); `dvc status` is clean and the store is
+   in sync;
 2. the data generation and the training are a DVC pipeline whose stages you
-   name `donnees` and `entrainer`; on a fresh clone, once the environment is
+   name `donnees` and `entrainer` (`entrainer` depends on `data/metriques.csv`, each
+   stage declares its parameters); on a fresh clone, once the environment is
    rebuilt from the lock and the data pulled, `dvc repro` gives back the
    metrics of the repository (RMSE 23.31 ms);
 3. the training logs on the MLflow server, in a finished run, its parameters,
-   its metrics and its model, with the tags `git_commit` (a commit of the
+   its metrics (`rmse` and `r2`) and its model, with the tags `git_commit` (a commit of the
    repository) and `data_sha256` (SHA-256 of `data/metriques.csv`);
 4. the model of that run is registered under the name `latence-service`, and
    the alias `challenger` points at the version built by that run;

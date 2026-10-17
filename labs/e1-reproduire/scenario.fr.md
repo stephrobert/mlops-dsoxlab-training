@@ -17,14 +17,17 @@ cassé.
 Dans `projet/`, commité dans Git (l'arbre de travail doit être propre), graine
 42 et paramètres de `params.yaml` inchangés :
 
-1. les données sont versionnées par DVC et poussées dans le stockage S3 ;
+1. les données sont versionnées par DVC et poussées dans le stockage S3, dont le
+   remote est la racine du bucket `dvc-donnees` ; le `.dvc/config` versionné ne
+   contient aucune clé d'accès (les clés restent dans l'environnement) ;
    `dvc status` est propre et le stockage est synchronisé ;
 2. la génération des données et l'entraînement forment un pipeline DVC dont
-   vous nommez les étapes `donnees` et `entrainer` ; sur un clone vierge, une
+   vous nommez les étapes `donnees` et `entrainer` (`entrainer` dépend de
+   `data/metriques.csv`, chaque étape déclare ses paramètres) ; sur un clone vierge, une
    fois l'environnement reconstruit depuis le verrou et les données tirées,
    `dvc repro` redonne les métriques du dépôt (RMSE 23,31 ms) ;
 3. l'entraînement journalise sur le serveur MLflow, dans un run terminé, ses
-   paramètres, ses métriques et son modèle, avec les tags `git_commit` (un
+   paramètres, ses métriques (`rmse` et `r2`) et son modèle, avec les tags `git_commit` (un
    commit du dépôt) et `data_sha256` (SHA-256 de `data/metriques.csv`) ;
 4. le modèle de ce run est enregistré sous le nom `latence-service`, et
    l'alias `challenger` pointe la version construite par ce run ;
