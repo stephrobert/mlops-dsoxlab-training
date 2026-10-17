@@ -185,21 +185,49 @@ def test_modele_enregistre_avec_l_alias_challenger() -> None:
         en="Do not use registry stages: use aliases.", fr="N'utilisez pas les stages du registre : utilisez les alias.")
 
 
-def suite(donnees: Path, metriques: Path) -> subprocess.CompletedProcess:
-    return run([P / ".venv" / "bin" / "python", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests"],
-               extra={"DONNEES": str(donnees), "METRIQUES": str(metriques)})
+def suite(donnees: Path, metriques: Path, champion: Path | None = None, cwd: Path = P) -> subprocess.CompletedProcess:
+    champion = champion or (W / "metrics-champion.json")
+    return run([P / ".venv" / "bin" / "python", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests"], cwd=cwd,
+               extra={"DONNEES": str(donnees), "METRIQUES": str(metriques), "CHAMPION": str(champion)})
 
 
-def test_la_suite_refuse_le_schema_casse_et_passe_sur_le_bon() -> None:
+def exiger_refus(r: subprocess.CompletedProcess, quoi_en: str, quoi_fr: str) -> None:
+    assert r.returncode in (1, 2) and re.search(r"failed|error", r.stdout, re.I), message(
+        en=f"Your suite must fail (exit code 1) on {quoi_en}; exit code {r.returncode}:\n{r.stdout[-600:]}",
+        fr=f"Votre suite doit échouer (code 1) sur {quoi_fr} ; code {r.returncode} :\n{r.stdout[-600:]}")
+
+
+def copie_avec_seuils(tmp: Path, **valeurs: float) -> Path:
+    """Copie du dépôt dont seuils.yaml est modifié : isole un garde-fou des autres."""
+    import shutil
+
+    import yaml
+
+    c = tmp / "copie"
+    shutil.copytree(P, c, ignore=shutil.ignore_patterns(".venv", ".git", "__pycache__", ".pytest_cache"))
+    seuils = yaml.safe_load((c / "seuils.yaml").read_text())
+    seuils.update(valeurs)
+    (c / "seuils.yaml").write_text(yaml.safe_dump(seuils))
+    return c
+
+
+def test_la_suite_passe_sur_le_bon_et_refuse_le_schema_casse() -> None:
     exiger_depot()
+    assert (P / "metrics-champion.json").exists() and "metrics-champion.json" in run(["git", "ls-files"]).stdout.split(), message(
+        en="Commit a copy of metrics-champion.json in the repository.",
+        fr="Versionnez une copie de metrics-champion.json dans le dépôt.")
     bon = suite(P / "data" / "metriques.csv", P / "metrics.json")
     assert bon.returncode == 0, message(
-        en=f"Your suite must pass on the repository's data and metrics (exit {bon.returncode}):\n{bon.stdout[-800:]}{bon.stderr[-300:]}",
-        fr=f"Votre suite doit passer sur les données et métriques du dépôt (code {bon.returncode}) :\n{bon.stdout[-800:]}{bon.stderr[-300:]}")
-    casse = suite(W / "casse-schema.csv", P / "metrics.json")
-    assert casse.returncode in (1, 2) and re.search(r"failed|error", casse.stdout, re.I), message(
-        en=f"Your suite must fail (exit code 1) on casse-schema.csv; exit code {casse.returncode}:\n{casse.stdout[-600:]}",
-        fr=f"Votre suite doit échouer (code 1) sur casse-schema.csv ; code {casse.returncode} :\n{casse.stdout[-600:]}")
+        en=f"Your suite must pass on the repository's data and metrics, the champion being metrics-champion.json (exit {bon.returncode}):\n{bon.stdout[-800:]}{bon.stderr[-300:]}",
+        fr=f"Votre suite doit passer sur les données et métriques du dépôt, le champion étant metrics-champion.json (code {bon.returncode}) :\n{bon.stdout[-800:]}{bon.stderr[-300:]}")
+    exiger_refus(suite(W / "casse-schema.csv", P / "metrics.json"), "casse-schema.csv", "casse-schema.csv")
+
+
+def test_la_suite_refuse_des_bornes_cassees() -> None:
+    exiger_depot()
+    exiger_refus(suite(W / "casse-bornes.csv", P / "metrics.json"),
+                 "casse-bornes.csv (columns present, values out of bounds)",
+                 "casse-bornes.csv (colonnes présentes, valeurs hors bornes)")
 
 
 def test_la_suite_refuse_un_rmse_au_dessus_du_seuil_versionne(tmp_path: Path) -> None:
@@ -217,7 +245,26 @@ def test_la_suite_refuse_un_rmse_au_dessus_du_seuil_versionne(tmp_path: Path) ->
         en="The tests must read the threshold from seuils.yaml.", fr="Les tests doivent lire le seuil dans seuils.yaml.")
     mauvais = tmp_path / "metrics-degrade.json"
     mauvais.write_text(json.dumps({"rmse": 40.0, "r2": 0.1}))
-    r = suite(P / "data" / "metriques.csv", mauvais)
-    assert r.returncode in (1, 2) and re.search(r"failed|error", r.stdout, re.I), message(
-        en=f"Your suite must fail (exit code 1) on a metrics file with rmse 40; exit code {r.returncode}:\n{r.stdout[-600:]}",
-        fr=f"Votre suite doit échouer (code 1) sur un fichier de métriques avec rmse 40 ; code {r.returncode} :\n{r.stdout[-600:]}")
+    # tolérance au champion relevée à 100 : seul le seuil absolu peut refuser.
+    c = copie_avec_seuils(tmp_path, tolerance_ms=100.0)
+    exiger_refus(suite(P / "data" / "metriques.csv", mauvais, cwd=c), "a metrics file with rmse 40 (above rmse_max)",
+                 "un fichier de métriques à rmse 40 (au-dessus de rmse_max)")
+
+
+def test_la_suite_refuse_un_candidat_moins_bon_que_le_champion(tmp_path: Path) -> None:
+    exiger_depot()
+    import yaml
+
+    seuils = yaml.safe_load((P / "seuils.yaml").read_text())
+    assert isinstance(seuils.get("tolerance_ms"), (int, float)) and seuils["tolerance_ms"] >= 0, message(
+        en="seuils.yaml must define tolerance_ms, the versioned tolerance against the champion.",
+        fr="seuils.yaml doit définir tolerance_ms, la tolérance versionnée face au champion.")
+    assert "tolerance_ms" in "".join(p.read_text() for p in (P / "tests").glob("*.py")), message(
+        en="The tests must read tolerance_ms from seuils.yaml.", fr="Les tests doivent lire tolerance_ms dans seuils.yaml.")
+    moins_bon = tmp_path / "metrics-moins-bon.json"
+    moins_bon.write_text(json.dumps({"rmse": 25.5, "r2": 0.7}))
+    # seuil absolu relevé à 100 : seule la comparaison au champion peut refuser.
+    c = copie_avec_seuils(tmp_path, rmse_max=100.0)
+    exiger_refus(suite(P / "data" / "metriques.csv", moins_bon, cwd=c),
+                 "a candidate 3 ms above the champion RMSE (even under rmse_max)",
+                 "un candidat à 3 ms au-dessus du RMSE du champion (même sous rmse_max)")

@@ -29,11 +29,17 @@ Dans `projet/`, commité dans Git (l'arbre de travail doit être propre), graine
 4. le modèle de ce run est enregistré sous le nom `latence-service`, et
    l'alias `challenger` pointe la version construite par ce run ;
 5. une suite pytest dans `tests/` lit le jeu dans la variable d'environnement
-   `DONNEES` (défaut `data/metriques.csv`) et les métriques dans `METRIQUES`
-   (défaut `metrics.json`), et échoue sur `casse-schema.csv` (colonnes
-   manquantes) comme sur un fichier de métriques dont le `rmse` dépasse
-   `rmse_max`, un seuil lu dans le fichier versionné `seuils.yaml`, qui laisse passer votre
-   modèle et au plus `28.0`. Elle passe sur les données et les métriques du dépôt.
+   `DONNEES` (défaut `data/metriques.csv`), les métriques du candidat dans
+   `METRIQUES` (défaut `metrics.json`) et celles du champion dans `CHAMPION`
+   (défaut `metrics-champion.json`, copie du fichier fourni à côté du bundle,
+   versionnée dans le dépôt). Elle échoue sur les deux jeux cassés fournis,
+   `casse-schema.csv` (colonnes manquantes) et `casse-bornes.csv` (valeurs hors
+   bornes) ; sur un candidat dont le `rmse` dépasse `rmse_max` ; et sur un
+   candidat dont le `rmse` dépasse celui du champion de plus de 3 ms.
+   `rmse_max` et `tolerance_ms`, la tolérance face au champion, sont lus dans
+   le fichier versionné `seuils.yaml` : `rmse_max` laisse passer votre modèle
+   et vaut au plus `28.0`, `tolerance_ms` le laisse passer aussi. La suite
+   passe sur les données et les métriques du dépôt.
 
 ## Ce qui est noté
 

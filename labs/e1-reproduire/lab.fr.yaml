@@ -7,5 +7,6 @@ description: |
   stockage S3, un pipeline qui redonne la même métrique sur un clone vierge,
   un run sur le serveur MLflow qui porte le commit et l'empreinte des données,
   le modèle enregistré avec l'alias challenger, et une suite pytest qui refuse
-  le jeu cassé fourni et un modèle au-dessus du seuil de métrique. Noté en
+  les deux jeux cassés fournis, un modèle au-dessus du seuil de métrique et un
+  candidat moins bon que le champion. Noté en
   boîte noire sur l'état du dépôt et des serveurs, sans indice.

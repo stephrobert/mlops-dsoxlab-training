@@ -28,11 +28,17 @@ the parameters of `params.yaml` left unchanged:
 4. the model of that run is registered under the name `latence-service`, and
    the alias `challenger` points at the version built by that run;
 5. a pytest suite in `tests/` reads the dataset from the environment variable
-   `DONNEES` (default `data/metriques.csv`) and the metrics from `METRIQUES`
-   (default `metrics.json`), and fails on `casse-schema.csv` (missing
-   columns) and on a metrics file whose `rmse` exceeds `rmse_max`, a
-   threshold read from the versioned file `seuils.yaml`, one that lets your model pass and at most `28.0`. It
-   passes on the repository's own data and metrics.
+   `DONNEES` (default `data/metriques.csv`), the metrics of the candidate from
+   `METRIQUES` (default `metrics.json`) and those of the champion from
+   `CHAMPION` (default `metrics-champion.json`, a copy of the file provided
+   next to the bundle, committed in the repository). It fails on both broken
+   datasets provided, `casse-schema.csv` (missing columns) and
+   `casse-bornes.csv` (values out of bounds); on a candidate whose `rmse`
+   exceeds `rmse_max`; and on a candidate whose `rmse` exceeds the champion's
+   by more than 3 ms. `rmse_max` and `tolerance_ms`, the tolerance against the
+   champion, are read from the versioned file `seuils.yaml`: `rmse_max` lets
+   your model pass and is at most `28.0`, `tolerance_ms` lets it pass too. The
+   suite passes on the repository's own data and metrics.
 
 ## What is graded
 

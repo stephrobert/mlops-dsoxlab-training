@@ -8,7 +8,8 @@ description: |
   that replays to the same metric on a fresh clone, a run on the MLflow
   server that carries the commit and the data fingerprint, the model
   registered with the alias challenger, and a pytest suite that refuses the
-  broken dataset provided and a model above the metric threshold. Graded as
+  two broken datasets provided, a model above the metric threshold and a
+  candidate worse than the champion. Graded as
   a black box on the state of the repository and of the servers, without
   hints.
 section: level-exams
@@ -29,11 +30,13 @@ doc_url: https://blog.stephane-robert.info/docs/mlops/epreuve-reproduire/
 runtime:
   type: shell
   workdir: challenge/work
-  # Le point de depart : le depot du fil rouge en bundle et le jeu au schema
-  # casse a refuser.
+  # Le point de depart : le depot du fil rouge en bundle, deux jeux casses a
+  # refuser (schema, bornes) et les metriques du champion de reference.
   fixtures:
     - depot.bundle
     - casse-schema.csv
+    - casse-bornes.csv
+    - metrics-champion.json
 validation:
   functional: true
   security: false
