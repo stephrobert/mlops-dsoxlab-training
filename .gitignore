@@ -19,3 +19,6 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 .venv/
+
+# Mot de passe des solutions chiffrées : jamais versionné.
+.vault-pass

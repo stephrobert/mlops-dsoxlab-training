@@ -1,0 +1,9 @@
+# Surcharge française : `title` et `description` seulement.
+title: "Rendre un entraînement reproductible"
+description: |
+  Le script d'entraînement d'un collègue donne des métriques différentes à
+  chaque lancement, et personne ne sait de quelles versions de bibliothèques il
+  dépend. Trouvez d'où vient la variation, verrouillez-la et prouvez-le : deux
+  entraînements donnent les mêmes métriques. Noté sur l'état réel du projet
+  (fichiers versionnés, verrou, empreinte des données, métriques), jamais sur
+  les commandes tapées.

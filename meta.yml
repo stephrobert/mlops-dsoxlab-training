@@ -44,7 +44,8 @@ sections:
   - id: m1-reproduire
     title: "Level 1: reproduce"
     description: "Structure a reproducible ML project, version data with DVC and S3 storage, track runs with MLflow, manage a model registry, and test data and model."
-    labs: []
+    labs:
+      - m1-projet-reproductible
   - id: m2-livrer
     title: "Level 2: ship"
     description: "Package a model, serve it with KServe on kind, run a canary, build the model CI/CD and retrain continuously."
