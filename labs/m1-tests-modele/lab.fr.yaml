@@ -1,0 +1,10 @@
+# Surcharge française : `title` et `description` seulement.
+title: "Refuser un modèle moins bon et des données cassées avec pytest"
+description: |
+  Un modèle est promu parce que sa métrique a l'air correcte, sur des données
+  que personne n'a contrôlées. Écrivez une suite pytest qui contrôle les
+  données (schéma, bornes) et le modèle (un seuil de métrique lu dans un
+  fichier versionné, une comparaison au champion), et qui échoue sur un jeu
+  cassé et sur un modèle moins bon. Noté en rejouant votre suite sur des jeux
+  et des modèles que le contrôle construit lui-même, jamais sur les commandes
+  tapées.

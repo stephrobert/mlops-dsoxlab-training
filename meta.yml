@@ -50,6 +50,7 @@ sections:
       - m1-dvc-pipeline
       - m1-mlflow-serveur
       - m1-registre-alias
+      - m1-tests-modele
   - id: m2-livrer
     title: "Level 2: ship"
     description: "Package a model, serve it with KServe on kind, run a canary, build the model CI/CD and retrain continuously."
