@@ -24,9 +24,9 @@
    "score": 0,
    "total": 11
   },
-  "commit": "52b6579",
-  "date": "2026-10-17",
-  "duree_s": 52,
+  "commit": "52777f1",
+  "date": "2026-10-19",
+  "duree_s": 53,
   "ecarts": [],
   "etapes": [
    "socle S3 (Garage) démarré, bucket vide",
@@ -35,7 +35,7 @@
    "après clean et run : 0/11",
    "poste rendu intact"
   ],
-  "python": "3.12.13",
+  "python": "3.14.7",
   "raisons": [],
   "rejeu": {
    "echecs": [
@@ -77,9 +77,9 @@
    "score": 0,
    "total": 5
   },
-  "commit": "6a0c8e0",
-  "date": "2026-10-17",
-  "duree_s": 18,
+  "commit": "52777f1",
+  "date": "2026-10-19",
+  "duree_s": 19,
   "ecarts": [],
   "etapes": [
    "socle S3 (Garage) démarré, bucket vide",
@@ -88,7 +88,7 @@
    "après clean et run : 0/5",
    "poste rendu intact"
   ],
-  "python": "3.12.13",
+  "python": "3.14.7",
   "raisons": [],
   "rejeu": {
    "echecs": [
@@ -123,8 +123,8 @@
    "score": 0,
    "total": 4
   },
-  "commit": "6a0c8e0",
-  "date": "2026-10-17",
+  "commit": "52777f1",
+  "date": "2026-10-19",
   "duree_s": 28,
   "ecarts": [],
   "etapes": [
@@ -134,7 +134,7 @@
    "après clean et run : 0/4",
    "poste rendu intact"
   ],
-  "python": "3.12.13",
+  "python": "3.14.7",
   "raisons": [],
   "rejeu": {
    "echecs": [
@@ -168,9 +168,9 @@
    "score": 0,
    "total": 4
   },
-  "commit": "6cfb34b",
-  "date": "2026-10-17",
-  "duree_s": 36,
+  "commit": "52777f1",
+  "date": "2026-10-19",
+  "duree_s": 41,
   "ecarts": [],
   "etapes": [
    "socle S3 (Garage) démarré, bucket vide",
@@ -179,7 +179,7 @@
    "après clean et run : 0/4",
    "poste rendu intact"
   ],
-  "python": "3.12.13",
+  "python": "3.14.7",
   "raisons": [],
   "rejeu": {
    "echecs": [
@@ -215,9 +215,9 @@
    "score": 0,
    "total": 6
   },
-  "commit": "6a0c8e0",
-  "date": "2026-10-17",
-  "duree_s": 18,
+  "commit": "52777f1",
+  "date": "2026-10-19",
+  "duree_s": 20,
   "ecarts": [],
   "etapes": [
    "socle S3 (Garage) démarré, bucket vide",
@@ -226,7 +226,7 @@
    "après clean et run : 0/6",
    "poste rendu intact"
   ],
-  "python": "3.12.13",
+  "python": "3.14.7",
   "raisons": [],
   "rejeu": {
    "echecs": [
@@ -262,9 +262,9 @@
    "score": 0,
    "total": 4
   },
-  "commit": "6a0c8e0",
-  "date": "2026-10-17",
-  "duree_s": 38,
+  "commit": "52777f1",
+  "date": "2026-10-19",
+  "duree_s": 39,
   "ecarts": [],
   "etapes": [
    "socle S3 (Garage) démarré, bucket vide",
@@ -273,7 +273,7 @@
    "après clean et run : 0/4",
    "poste rendu intact"
   ],
-  "python": "3.12.13",
+  "python": "3.14.7",
   "raisons": [],
   "rejeu": {
    "echecs": [
@@ -308,9 +308,9 @@
    "score": 0,
    "total": 5
   },
-  "commit": "6a0c8e0",
-  "date": "2026-10-17",
-  "duree_s": 27,
+  "commit": "52777f1",
+  "date": "2026-10-19",
+  "duree_s": 28,
   "ecarts": [],
   "etapes": [
    "socle S3 (Garage) démarré, bucket vide",
@@ -319,7 +319,7 @@
    "après clean et run : 0/5",
    "poste rendu intact"
   ],
-  "python": "3.12.13",
+  "python": "3.14.7",
   "raisons": [],
   "rejeu": {
    "echecs": [
