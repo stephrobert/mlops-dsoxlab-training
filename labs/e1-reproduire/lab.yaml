@@ -26,7 +26,7 @@ skills:
   - uv
 distros:
   - any
-doc_url: https://blog.stephane-robert.info/docs/mlops/epreuve-reproduire/
+doc_url: https://www.stephane-robert.info/docs/mlops/epreuve-reproduire/
 runtime:
   type: shell
   workdir: challenge/work

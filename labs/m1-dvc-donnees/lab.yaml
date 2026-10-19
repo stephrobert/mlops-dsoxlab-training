@@ -18,7 +18,7 @@ skills:
   - git
 distros:
   - any
-doc_url: https://blog.stephane-robert.info/docs/mlops/versionner-donnees-dvc/
+doc_url: https://www.stephane-robert.info/docs/mlops/versionner-donnees-dvc/
 runtime:
   type: shell
   workdir: challenge/work

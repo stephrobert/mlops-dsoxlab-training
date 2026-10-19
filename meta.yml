@@ -8,7 +8,7 @@ repo:
   id: mlops-dsoxlab-training
   category: mlops
   title: "MLOps Training: reproduce, ship and operate a model"
-  blog_url: "https://blog.stephane-robert.info/docs/mlops/"
+  blog_url: "https://www.stephane-robert.info/docs/mlops/"
   issues_url: "https://github.com/stephrobert/mlops-dsoxlab-training/issues"
   description: |
     Labs for the MLOps course. One thread throughout: a seeded generator of
