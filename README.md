@@ -1,30 +1,64 @@
-# mlops-dsoxlab-training
+# MLOps Training: reproduce a training run, and prove it
 
 **Language:** [English](./README.md) · [Français](./README.fr.md)
 
-TO FILL IN: one paragraph. What this catalog teaches, and to whom.
+[![CI](https://github.com/stephrobert/mlops-dsoxlab-training/actions/workflows/ci.yml/badge.svg)](https://github.com/stephrobert/mlops-dsoxlab-training/actions/workflows/ci.yml)
+[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/stephrobert/mlops-dsoxlab-training?label=OpenSSF%20Scorecard)](https://securityscorecards.dev/viewer/?uri=github.com/stephrobert/mlops-dsoxlab-training)
+[![Plumber compliance](https://score.getplumber.io/github.com/stephrobert/mlops-dsoxlab-training.svg)](https://score.getplumber.io/github.com/stephrobert/mlops-dsoxlab-training)
+[![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](./LICENSE)
+
+Seven hands-on labs to make a machine learning project reproducible and
+traceable: pin a training run so it gives the same result twice, get back the
+exact version of a dataset, replay the whole thing as a pipeline, find which
+run produced a model, designate it by alias, and refuse a worse one. Every lab
+runs **on your own machine**, in a shell, and is graded on the state the
+project ends in, never on the commands typed.
+
+Written for engineers who inherit a model nobody can rebuild.
 
 ## What it is
 
-TO FILL IN: what a learner can do at the end that they could not do at the
-start. Say it in terms of capability, not of topics covered.
+At the end, a learner can take a training script that gives a different result
+at every run and return a project where the run is pinned, the data is
+versioned, the pipeline replays, and the registry says which run produced the
+model that is serving. Each of those is proven by tests that read the state of
+the project and of the MLflow registry, never the commands typed.
 
-Say here why the labs are in this order, if the order matters.
+**The order matters, and it is not the order of the topics.** Reproducibility
+comes before tracking, because tracking a run you cannot replay records a
+number nobody can check. Tracking comes before the registry, and the registry
+before the tests that refuse a regression.
+
+`dsoxlab next` follows that order, derived from the position of each lab in
+`meta.yml`.
+
+### What the tests do, and what they refuse to do
+
+**A lab is graded on the state of the project, never on the commands typed.**
+
+The tests question the MLflow registry through its API, replay the DVC
+pipeline, and compare the artefacts produced. They do not read the script the
+learner wrote.
+
+The trap this avoids is the run that looks reproducible. A script with a seed
+set in one place and a library that draws from another gives two different
+models and one identical log line, so the labs require the **same artefact
+twice**, not the same message.
 
 ## Requirements
 
-TO FILL IN, and be exact: a requirement that is missing from this list costs
-the learner an hour of searching.
+A missing requirement costs the learner an hour of searching, so this list is
+exact and measured against `meta.yml`.
 
 - **Python 3.11+ and [`uv`](https://docs.astral.sh/uv/)**
 - **`git`**
-- **`dsoxlab`**, the engine, installed as a standalone tool (see below).
-- TO FILL IN: the tools the labs need on the machine.
+- **`dsoxlab`**, the engine, installed as a standalone tool (see below)
 
-TO FILL IN: whether this catalog has `vm` labs. If it does, name the
-hypervisor, the RAM and the disk the machines need. If it does not, say so:
-`dsoxlab provision` is then never called, and saying it spares the reader a
-question.
+**No virtual machine, no hypervisor, no `provision`.** All seven labs are
+`shell` labs: they run on your own machine, in the working directory the lab
+lays down. `meta.yml` declares no `infra:` block at all, which is what makes
+this catalog the lightest of the collection to start.
 
 `dsoxlab doctor` says what this repository needs and what it does not, and
 tells apart a check that failed from one it could not measure.
@@ -39,25 +73,28 @@ as a standalone tool, so it stays out of this repository:
 uv tool install dsoxlab
 
 # 2. This lab catalog
-git clone <this repository>
+git clone https://github.com/stephrobert/mlops-dsoxlab-training.git
 cd mlops-dsoxlab-training
 
-# 3. Check the contract is valid
+# 3. Check the contract
 dsoxlab validate-structure
+dsoxlab doctor
 ```
 
 ### Your first lab, in five minutes
 
 ```bash
 export LAB_HOME=$PWD
-dsoxlab list-labs                # the catalog, in teaching order
-dsoxlab run       <id>           # set the starting state
-dsoxlab challenge <id>           # read the mission
-dsoxlab check     <id>           # run the tests, record the score
+dsoxlab list-labs                           # the seven labs, in teaching order
+dsoxlab run       m1-projet-reproductible   # sets the starting state
+dsoxlab challenge m1-projet-reproductible   # read the mission, no step-by-step
+dsoxlab check     m1-projet-reproductible   # run the tests, record the score
+dsoxlab clean     m1-projet-reproductible   # undo what the lab set up
 ```
 
-`run` is what prepares the lab. Running `check` on a lab you never started
-measures nothing, and says so rather than recording a 0.
+`run` is what prepares the lab: it copies the declared fixtures into the
+working directory. Running `check` on a lab you never started measures
+nothing, and says so rather than recording a 0.
 
 ### Keeping it up to date
 
@@ -66,77 +103,86 @@ uv tool upgrade dsoxlab        # the engine, published on PyPI
 git -C <this repo> pull        # the catalog
 ```
 
-The engine and the catalog move independently: a new `dsoxlab` never requires
-re-cloning the labs, and new labs never require upgrading the tool, as long as
-the contract version matches.
-
 ## How it works
 
 ### The declarative contract (two levels)
 
-The catalog is described by data, not code, which is what keeps the `dsoxlab`
-engine domain-agnostic:
+This repository is **not the CLI**. An engine defect is fixed in
+[dsoxlab](https://github.com/stephrobert/dsoxlab), or reported as an issue
+there. Here, everything driving the CLI is declarative:
 
 - **`meta.yml`** at the root declares the repository identity and the **order**
-  of the sections shown by `list-labs`;
+  of the sections shown by `list-labs`. It declares **no infrastructure**;
 - **`lab.yaml`** per lab declares its `skills`, `level`, `runtime` (type,
-  fixtures, services), `distros`, `doc_url` and a `validation` block. A
-  `lab.fr.yaml` overrides `title` and `description` in French, and nothing else.
+  `workdir`, `fixtures`), `distros`, `doc_url` and a `validation` block. A
+  `lab.fr.yaml` overrides `title` and `description` in French, and nothing
+  else;
+- **`challenge/tests/test_functional.py`** carries the proof.
 
-`dsoxlab validate-structure` checks the whole contract: `meta.yml` is well
-formed, every referenced lab exists with a valid `lab.yaml`, every declared
-test and fixture file is really there, and every relative link in a README
-leads somewhere.
+A fixture that is declared but missing from disk makes `run` fail and names
+every offender at once. A file present in `fixtures/` but not declared is
+reported by `validate-structure`. The two directions are checked, because a
+half-filled working directory looks like it works and sends the learner
+hunting for a mistake in their own code.
 
 ### The lab lifecycle
 
 ```bash
 dsoxlab list-labs              # browse the catalog
 dsoxlab show      <id>         # metadata and status of one lab
-dsoxlab run       <id>         # set the starting state
+dsoxlab run       <id>         # lay down the initial state
 dsoxlab challenge <id>         # read the mission, no step-by-step
 dsoxlab hint      <id>         # reveal a hint (deducted from the score)
 dsoxlab check     <id>         # run the tests, compute and record the score
+dsoxlab submit    <id>         # for the exam: a verdict, not a bare score
 dsoxlab clean     <id>         # undo what the lab set up
 dsoxlab progress               # per-section progress, average score
 ```
 
-### Runtimes
-
-TO FILL IN: one row per runtime this catalog actually uses, and what it asks
-of the machine.
-
-| Runtime | What the lab asks for |
-|---|---|
-| `shell` | a terminal, and TO FILL IN |
-
 ### The validation model
 
-Validation **proves the state, it does not trust the learner**. Each lab ships
-`pytest` tests under `challenge/tests/` that read what the system holds, never
-what a file contains or which commands were typed.
+Validation **proves the state, it does not trust the learner**, and a lab is
+proven **in both directions**: the tests must fail before the work and pass
+after it. A test that is green before the work is not a test, it is an
+assumption about the setup. `scripts/valider-labs.py` requires **0 before and
+100 after**, and records the verdict in
+[`validation-labs.json`](./validation-labs.json): **7 VALIDE out of 7**.
 
-And a lab is proven **in both directions**: the tests must fail before the work
-and pass after it. A test that is green before the work is not a test, it is an
-assumption about the setup.
-
-TO FILL IN: where the reference solutions live, and whether they are encrypted.
-A solution shipped in clear text spoils the lab, and git keeps it forever.
-
-### Scoring, hints, progress
-
-`check` records a score (tests passed out of total, minus the cost of any hints
-revealed). Hints are **base64-encoded** in `challenge/hints.yaml`, so that
-opening the file does not give them away, and their cost grows with their
-precision. History lives in a SQLite database **local to this repository**.
-
-A run that measured nothing is neither a pass nor a failure: if every collected
-test skips, `check` records no score and says why. A score of 0 would accuse the
-lab of what is missing from the machine.
+The reference solutions live in `solution/<lab>/solution.sh`, and **all eight
+are encrypted** with `ansible-vault`. A solution shipped in clear text spoils
+the lab, and git keeps it forever.
 
 ## Catalog
 
-TO FILL IN: one subsection per section of `meta.yml`, with its labs.
+Seven labs, **4 h 30** in all. Levels 2 and 3 are declared in `meta.yml` and
+carry no lab yet: saying so is better than letting a learner discover it
+halfway through.
+
+### Level 1: reproduce
+
+Six labs, 3 h 45.
+
+| Lab | What it proves |
+|---|---|
+| `m1-projet-reproductible` | the same training run gives the same artefact twice |
+| `m1-dvc-donnees` | the exact version of a dataset comes back |
+| `m1-dvc-pipeline` | the training replays as a pipeline, not as a memory |
+| `m1-mlflow-serveur` | the run that produced a model can be found |
+| `m1-registre-alias` | a model is designated by alias, not by number |
+| `m1-tests-modele` | a worse model and broken data are refused |
+
+### Level exam
+
+One graded lab, 45 min.
+
+| Lab | What it proves |
+|---|---|
+| `e1-reproduire` | **graded**: a model made reproducible and traceable |
+
+### Levels 2 and 3
+
+`m2-livrer` (ship) and `m3-exploiter` (operate) are declared and empty. They
+are the next work on this catalog.
 
 ## Contributing
 
@@ -144,8 +190,9 @@ Read [`CONTRIBUTING.md`](./CONTRIBUTING.md). In short: a lab is proven **in both
 directions** before it is merged, `dsoxlab validate-structure` is green, and the
 statement exists in English and in French.
 
-Anything user-facing is bilingual. A document translated on one side only is
-reported by the validator, not left to goodwill.
+A verdict is never committed together with the shared code it measures: the
+staleness check compares commit dates, and a verdict written in the same commit
+as the files it grades leaves nothing to compare. A hook enforces it.
 
 ## License
 

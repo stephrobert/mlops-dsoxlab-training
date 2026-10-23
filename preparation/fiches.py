@@ -1,5 +1,6 @@
 """Génère preparation/fiches/*.md depuis la table du cadrage §7 (une fiche par lab)."""
 import os
+
 D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fiches")
 os.makedirs(D, exist_ok=True)
 LABS = [
@@ -24,7 +25,8 @@ LABS = [
  ("e3-exploiter","épreuve m3","kind, Prometheus, S3","challenge","Prouver le niveau 3 sans indice : 60 min.","service dégradé, dérive injectée, registre fourni","alerte de dérive `firing` ; alias `champion` repointé ; `InferenceService` sert de nouveau le champion ; runbook versionné"),
 ]
 for (i, lecon, env, typ, obj, etat, valide) in LABS:
-    open(os.path.join(D, i + ".md"), "w", encoding="utf-8").write(f"""# {i}
+    with open(os.path.join(D, i + ".md"), "w", encoding="utf-8") as fiche:
+        fiche.write(f"""# {i}
 
 | Champ | Valeur |
 |---|---|

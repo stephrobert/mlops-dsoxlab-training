@@ -24,7 +24,7 @@ import subprocess
 import sys
 import tempfile
 import time
-from datetime import date
+from datetime import UTC, datetime
 from pathlib import Path
 
 import yaml
@@ -34,7 +34,7 @@ RELEVE = RACINE / "validation-labs.json"
 
 
 def dso(*args: str):
-    return subprocess.run(["dsoxlab", *args], cwd=RACINE, input="y\n",
+    return subprocess.run(["dsoxlab", *args], check=False, cwd=RACINE, input="y\n",
                           capture_output=True, text=True, timeout=900)
 
 
@@ -62,7 +62,7 @@ def a_besoin_du_socle(lab: str) -> bool:
 
 
 def conteneurs() -> int:
-    r = subprocess.run(["docker", "ps", "--format", "{{.Names}}"],
+    r = subprocess.run(["docker", "ps", "--format", "{{.Names}}"], check=False,
                        capture_output=True, text=True)
     return sum(1 for n in r.stdout.split() if n.startswith("mlops-socle"))
 
@@ -74,7 +74,7 @@ def solution(lab: str, work: Path) -> int:
                             str(RACINE / ".vault-pass"), "--output",
                             f"{tmp}/{f.name}", str(f)],
                            check=True, capture_output=True)
-        return subprocess.run(["bash", f"{tmp}/solution.sh"], cwd=work,
+        return subprocess.run(["bash", f"{tmp}/solution.sh"], check=False, cwd=work,
                               env={**os.environ, "MLOPS_RACINE": str(RACINE)},
                               capture_output=True).returncode
 
@@ -82,17 +82,21 @@ def solution(lab: str, work: Path) -> int:
 def joue(lab: str) -> dict:
     t0 = time.time()
     work = RACINE / "labs" / lab / "challenge" / "work"
-    res = {"commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=RACINE,
+    res = {"commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], check=False, cwd=RACINE,
                                     capture_output=True, text=True).stdout.strip(),
-           "date": date.today().isoformat(), "ecarts": [], "etapes": [], "raisons": []}
-    ver = subprocess.run(["uv", "--version"], capture_output=True, text=True).stdout.split()
+           # La date du jour, en heure locale : c'est celle de la machine qui
+           # a joue la campagne, et c'est bien ce qu'on veut lire.
+           "date": datetime.now(tz=UTC).date().isoformat(),
+           "ecarts": [], "etapes": [], "raisons": []}
+    ver = subprocess.run(["uv", "--version"], check=False, capture_output=True, text=True).stdout.split()
     res["python"] = ".".join(map(str, sys.version_info[:3]))
     res["uv"] = ver[1] if len(ver) > 1 else ""
     besoin = a_besoin_du_socle(lab)
     try:
         dso("clean", lab)
         if besoin:
-            socle("arreter"); socle("demarrer", lab)
+            socle("arreter")
+            socle("demarrer", lab)
             res["etapes"].append("socle S3 (Garage) démarré, bucket vide")
         dso("run", lab)
         res["avant"] = check(lab)
@@ -104,7 +108,9 @@ def joue(lab: str) -> dict:
         res["etapes"].append(f"après la solution : {res['apres']['passed']}/{res['apres']['total']}")
         dso("clean", lab)
         if besoin:
-            socle("arreter"); socle("demarrer", lab)  # bucket vidé, comme un poste neuf
+            # Bucket vidé, comme un poste neuf.
+            socle("arreter")
+            socle("demarrer", lab)
         dso("run", lab)
         res["rejeu"] = check(lab)
         res["etapes"].append(f"après clean et run : {res['rejeu']['passed']}/{res['rejeu']['total']}")
@@ -136,7 +142,7 @@ def main() -> int:
         print(f"[valider-labs] {lab} : {releve[lab]['verdict']} "
               f"({releve[lab]['duree_s']}s)", flush=True)
     RELEVE.write_text(json.dumps(releve, indent=1, sort_keys=True, ensure_ascii=False) + "\n")
-    return 0 if all(releve[l]["verdict"] == "VALIDE" for l in cibles) else 1
+    return 0 if all(releve[nom]["verdict"] == "VALIDE" for nom in cibles) else 1
 
 
 if __name__ == "__main__":
