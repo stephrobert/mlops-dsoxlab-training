@@ -41,7 +41,15 @@ def dso(*args: str):
 def check(lab: str) -> dict:
     r = dso("check", lab, "--json")
     c = json.loads(r.stdout)["check"]
-    echecs = sorted(set(re.findall(r"::(\w+) (?:FAILED|ERROR)", c.get("output", ""))))
+    # Depuis dsoxlab 0.8.0, `failed_checks` nomme les controles rates pour tous
+    # les labs, et une epreuve ne donne plus rien dans `output` (vide,
+    # `output_withheld: true`). Repli sur la sortie brute avant 0.8.0.
+    noms = c.get("failed_checks")
+    if isinstance(noms, list) and all(isinstance(n, str) for n in noms) and (
+            noms or c.get("status") != "failed"):
+        echecs = sorted(set(noms))
+    else:
+        echecs = sorted(set(re.findall(r"::(\w+) (?:FAILED|ERROR)", c.get("output", ""))))
     return {"echecs": echecs, "passed": c["passed"], "score": int(c["score"]),
             "total": c["total"]}
 
