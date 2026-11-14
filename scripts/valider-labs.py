@@ -34,8 +34,20 @@ RELEVE = RACINE / "validation-labs.json"
 
 
 def dso(*args: str):
-    return subprocess.run(["dsoxlab", *args], check=False, cwd=RACINE, input="y\n",
+    commande = ["dsoxlab", *args]
+    # dsoxlab exige --yes sans terminal : « y » sur l'entrée ne suffit plus, et
+    # un clean refusé (rc=2) laissait le livrable du passage précédent.
+    if args and args[0] == "clean" and "--yes" not in args:
+        commande.append("--yes")
+    return subprocess.run(commande, check=False, cwd=RACINE, input="y\n",
                           capture_output=True, text=True, timeout=900)
+
+
+def nettoyer(lab: str, res: dict) -> None:
+    """clean du lab ; un échec est un écart, qui fait tomber le verdict."""
+    r = dso("clean", lab)
+    if r.returncode != 0:
+        res["ecarts"].append(f"clean a échoué (rc={r.returncode}) : {(r.stderr or r.stdout)[-200:]}")
 
 
 def check(lab: str) -> dict:
@@ -101,7 +113,7 @@ def joue(lab: str) -> dict:
     res["uv"] = ver[1] if len(ver) > 1 else ""
     besoin = a_besoin_du_socle(lab)
     try:
-        dso("clean", lab)
+        nettoyer(lab, res)
         if besoin:
             socle("arreter")
             socle("demarrer", lab)
@@ -114,7 +126,7 @@ def joue(lab: str) -> dict:
             res["raisons"].append(f"solution.sh a rendu {rc}")
         res["apres"] = check(lab)
         res["etapes"].append(f"après la solution : {res['apres']['passed']}/{res['apres']['total']}")
-        dso("clean", lab)
+        nettoyer(lab, res)
         if besoin:
             # Bucket vidé, comme un poste neuf.
             socle("arreter")
@@ -123,7 +135,7 @@ def joue(lab: str) -> dict:
         res["rejeu"] = check(lab)
         res["etapes"].append(f"après clean et run : {res['rejeu']['passed']}/{res['rejeu']['total']}")
     finally:
-        dso("clean", lab)
+        nettoyer(lab, res)
         if besoin:
             socle("arreter")
         if besoin and conteneurs():
