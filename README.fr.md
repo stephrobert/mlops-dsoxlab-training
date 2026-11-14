@@ -109,39 +109,22 @@ git -C <ce dépôt> pull         # le catalogue
 
 ## Comment ça marche
 
-### Le contrat déclaratif, à deux niveaux
+### Le moteur, documenté là où il vit
 
-Ce dépôt n'est **pas** la CLI. Un défaut du moteur se corrige dans
+Ce catalogue se joue avec `dsoxlab`, qui documente lui-même son contrat et ses
+commandes. Ce README ne les répète pas, pour ne pas dériver quand le moteur
+change (issue dsoxlab #201) :
+
+- le contrat : `meta.yml`, `lab.yaml`, `lab.<langue>.yaml`, les runtimes et
+  leurs champs : [contrat](https://github.com/stephrobert/dsoxlab/blob/main/docs/contract-v1.fr.md) ;
+- les commandes et la vie d'un lab, de `run` à `check` :
+  [commandes](https://github.com/stephrobert/dsoxlab/blob/main/docs/commands.fr.md) et [jouer un lab](https://github.com/stephrobert/dsoxlab/blob/main/docs/learner.fr.md) ;
+- écrire un lab, et ce que contrôle `validate-structure` :
+  [guide de l'auteur](https://github.com/stephrobert/dsoxlab/blob/main/docs/catalog-author.fr.md).
+
+Ce dépôt n'est **pas** la CLI : un défaut du moteur se corrige dans
 [dsoxlab](https://github.com/stephrobert/dsoxlab), ou s'y signale par une
-issue. Ici, tout ce qui pilote la CLI est déclaratif :
-
-- **`meta.yml`** à la racine déclare l'identité du dépôt et l'**ordre** des
-  sections affichées par `list-labs`. Il ne déclare **aucune infrastructure** ;
-- **`lab.yaml`** par lab déclare ses `skills`, son `level`, son `runtime`
-  (type, `workdir`, `fixtures`), ses `distros`, son `doc_url` et un bloc
-  `validation`. Un `lab.fr.yaml` surcharge `title` et `description` en
-  français, et rien d'autre ;
-- **`challenge/tests/test_functional.py`** porte la preuve.
-
-Une fixture déclarée mais absente du disque fait échouer `run` et nomme toutes
-les fautives d'un coup. Un fichier présent dans `fixtures/` mais non déclaré
-est signalé par `validate-structure`. Les deux sens sont contrôlés, parce
-qu'un répertoire de travail à moitié rempli a l'air de marcher et envoie
-l'apprenant chercher l'erreur dans son propre code.
-
-### Le cycle de vie d'un lab
-
-```bash
-dsoxlab list-labs              # parcourir le catalogue
-dsoxlab show      <id>         # métadonnées et état d'un lab
-dsoxlab run       <id>         # poser l'état initial
-dsoxlab challenge <id>         # lire la mission, sans pas-à-pas
-dsoxlab hint      <id>         # révéler un indice (déduit du score)
-dsoxlab check     <id>         # jouer les tests, calculer et enregistrer le score
-dsoxlab submit    <id>         # pour l'épreuve : un verdict, pas un score
-dsoxlab clean     <id>         # défaire ce que le lab a posé
-dsoxlab progress               # progression par section, score moyen
-```
+issue. Ici, le catalogue déclare ses labs et leurs tests, et aucune infrastructure.
 
 ### Le modèle de validation
 

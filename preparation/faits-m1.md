@@ -22,7 +22,7 @@ Rejeu : `python3 scripts/valider-labs.py --lab <id>` (clean, socle, run, check, 
 ## Pièges
 
 - `dsoxlab run` ouvre un shell interactif : l'automatiser avec `</dev/null`. `dsoxlab clean` demande « y/N » sur l'entrée standard.
-- `setup.sh` et `cleanup.sh` sont INTERDITS dans un lab `shell` par `validate-structure` (ils sont réservés aux labs `vm`, en `setup.yaml`/`cleanup.yaml` Ansible). Le démarrage du socle est donc dans `scripts/socle-demarrer.sh` et `scripts/socle-arreter.sh` ; l'apprenant les lance avant `dsoxlab run`.
+- `validate-structure` interdit `cleanup.sh`, `runtime/shell.sh` et `Makefile` dans un lab `shell` (et `cleanup.sh`, `runtime/kvm.sh`, `runtime/incus.sh`, `Makefile` dans un lab `vm`), mais pas `setup.sh`. Un lab `shell` peut aussi porter un `setup.yaml` et un `cleanup.yaml` Ansible, joués sur `localhost` par `run` et `clean` (dsoxlab #298, `src/dsoxlab/runtimes/shell.py`). Correction du 2026-11-14 : cette note affirmait que `setup.sh` était interdit et que les playbooks étaient réservés aux labs `vm`. Le démarrage du socle est dans `scripts/socle-demarrer.sh` et `scripts/socle-arreter.sh` ; l'apprenant les lance avant `dsoxlab run`.
 - `validate-structure` refuse une solution en clair : elle est chiffrée par `ansible-vault` (`scripts/chiffre-solutions.sh`, mot de passe `.vault-pass`, ignoré par Git). Sans `.vault-pass`, le rejeu est impossible.
 - Une fixture en lien symbolique (`genere-metriques.py` vers `shared/`) est copiée comme fichier dans le workdir.
 - Le catalogue n'a pas de `lab.en.yaml` : `lab.yaml` est l'anglais canonique, `lab.fr.yaml` la surcharge, comme les frères.
