@@ -1,4 +1,4 @@
-# Scenario
+# Challenge: Scenario
 
 A colleague hands you `train.py`: a model that predicts a service's p95 latency
 from its load. She announced an RMSE of 23 ms. You run it twice: you get two
@@ -17,3 +17,9 @@ workstation that clones it. Expected dataset: seed 42, 5000 rows, in
 lives in `.venv`, and the seed is set in `params.yaml` (key `seed`). Finding
 where the variation comes from, and what must be versioned so someone else gets
 the same result, is your work.
+
+## Check your work
+
+```bash
+dsoxlab check m1-projet-reproductible
+```

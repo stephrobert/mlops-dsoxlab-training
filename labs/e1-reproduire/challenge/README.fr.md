@@ -1,4 +1,4 @@
-# Rendre un modèle reproductible et traçable
+# Challenge : Rendre un modèle reproductible et traçable
 
 ## Situation
 
@@ -51,3 +51,9 @@ tapées : le correcteur clone votre dépôt, rejoue le pipeline et lance votre
 suite sur ses propres jeux et fichiers de métriques. Aucun indice n'est
 proposé : l'épreuve mesure ce que vous savez déjà faire. Seuil de réussite :
 70 points.
+
+## Valider votre travail
+
+```bash
+dsoxlab check e1-reproduire
+```

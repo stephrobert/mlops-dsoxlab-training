@@ -1,4 +1,4 @@
-# Scénario
+# Challenge : Scénario
 
 `train.py` journalise déjà chaque entraînement sur le serveur MLflow
 (`http://127.0.0.1:5000`, démarré par `bash scripts/socle-demarrer.sh mlflow`
@@ -26,3 +26,9 @@ lancez `uv sync`, créez `data/` et générez `data/metriques.csv` avec la grain
 
 Attention : avec cette pile, le chargement d'un modèle peut rester suspendu.
 Regardez `MLFLOW_ENABLE_PROXY_MULTIPART_DOWNLOAD`.
+
+## Valider votre travail
+
+```bash
+dsoxlab check m1-registre-alias
+```

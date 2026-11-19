@@ -1,4 +1,4 @@
-# Scénario
+# Challenge : Scénario
 
 La semaine dernière, quelqu'un a relancé le générateur de métriques sur le
 même fichier `data/metriques.csv`. Le jeu précédent (graine 42) est perdu, et
@@ -16,3 +16,9 @@ deux commits distincts, avec les données dans le bucket. Un clone vierge doit
 restituer par `dvc pull` le jeu courant (graine 43), et le retour au premier
 commit doit restituer le jeu de graine 42, octet pour octet. Le dépôt reste
 propre et la configuration du remote voyage avec le dépôt, pas les clés.
+
+## Valider votre travail
+
+```bash
+dsoxlab check m1-dvc-donnees
+```

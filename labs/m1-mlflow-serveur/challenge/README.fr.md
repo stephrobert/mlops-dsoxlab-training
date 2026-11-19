@@ -1,4 +1,4 @@
-# Scénario
+# Challenge : Scénario
 
 `train.py` entraîne un modèle de latence à partir de `data/metriques.csv` et
 affiche deux nombres. Rien n'est conservé : une semaine plus tard, personne ne
@@ -22,3 +22,9 @@ installé dans l'environnement du projet (la version du serveur) :
 3. taguez `v1` le commit du premier entraînement ;
 4. écrivez dans `run-v1.txt` l'identifiant du run qui a produit le modèle de
    `v1`, puis commitez. L'arbre de travail doit être propre.
+
+## Valider votre travail
+
+```bash
+dsoxlab check m1-mlflow-serveur
+```

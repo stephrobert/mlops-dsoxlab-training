@@ -1,4 +1,4 @@
-# Scenario
+# Challenge: Scenario
 
 In this repository, the data is generated with `genere-metriques.py`, then
 `train.py` is run, by hand, in that order. Seed and hyperparameters are in
@@ -14,3 +14,9 @@ versioned, with its outputs in the bucket. A fresh clone, its environment
 rebuilt from the lock, must give the same metrics. A `dvc repro` with no change
 must replay nothing, and changing `n_arbres` must replay only the training
 stage, which you will name `entrainer`.
+
+## Check your work
+
+```bash
+dsoxlab check m1-dvc-pipeline
+```

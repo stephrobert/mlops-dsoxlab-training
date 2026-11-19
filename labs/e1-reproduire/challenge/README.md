@@ -1,4 +1,4 @@
-# Make a model reproducible and traceable
+# Challenge: Make a model reproducible and traceable
 
 ## Situation
 
@@ -49,3 +49,9 @@ The state of `projet/`, of the S3 store and of the MLflow server, never the
 commands typed: the grader clones your repository, replays the pipeline and
 runs your suite on its own datasets and metrics files. No hint is offered:
 the exam measures what you already know how to do. Pass mark: 70 points.
+
+## Check your work
+
+```bash
+dsoxlab check e1-reproduire
+```
