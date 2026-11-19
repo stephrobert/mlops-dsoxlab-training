@@ -1,4 +1,4 @@
-# Scenario
+# Challenge: Scenario
 
 `train.py` trains a latency model from `data/metriques.csv` and prints two
 numbers. Nothing is kept: a week later nobody can say which parameters, which
@@ -21,3 +21,9 @@ installed in the project environment (the server version):
 3. tag the commit of the first training `v1`;
 4. write in `run-v1.txt` the id of the run that produced the model of `v1`,
    then commit. The working tree must be clean.
+
+## Check your work
+
+```bash
+dsoxlab check m1-mlflow-serveur
+```

@@ -1,4 +1,4 @@
-# Scenario
+# Challenge: Scenario
 
 `train.py` already logs each training on the MLflow server
 (`http://127.0.0.1:5000`, started with `bash scripts/socle-demarrer.sh mlflow`
@@ -24,3 +24,9 @@ In the work directory (`mlflow==3.17.1` is already a dependency; run
 
 Careful: with this stack, loading a model may hang. Look at
 `MLFLOW_ENABLE_PROXY_MULTIPART_DOWNLOAD`.
+
+## Check your work
+
+```bash
+dsoxlab check m1-registre-alias
+```

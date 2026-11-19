@@ -1,4 +1,4 @@
-# Scénario
+# Challenge : Scénario
 
 Une collègue vous passe `train.py` : un modèle qui prédit la latence p95 d'un
 service à partir de sa charge. Elle a annoncé un RMSE de 23 ms. Vous le lancez
@@ -18,3 +18,9 @@ métriques, sur n'importe quel poste qui le clone. Le jeu attendu : graine 42,
 son environnement vit dans `.venv`, et la graine se règle dans `params.yaml`
 (clé `seed`). Il vous revient de trouver d'où vient la variation, et ce qu'il
 faut versionner pour qu'un autre obtienne le même résultat.
+
+## Valider votre travail
+
+```bash
+dsoxlab check m1-projet-reproductible
+```

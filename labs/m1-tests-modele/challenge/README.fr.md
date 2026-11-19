@@ -1,4 +1,4 @@
-# Scénario
+# Challenge : Scénario
 
 Le modèle de latence est promu quand son RMSE « a l'air correct », sur un CSV
 que personne n'inspecte. Deux incidents ont déjà eu lieu : une colonne
@@ -29,3 +29,9 @@ Dans le répertoire de travail (`uv sync`, puis créez `data/` et générez
    modèles (bon, trop faible, moins bon que le champion) : elle doit passer
    sur les valides et échouer (tests en échec, code de sortie 1) sur les
    autres.
+
+## Valider votre travail
+
+```bash
+dsoxlab check m1-tests-modele
+```

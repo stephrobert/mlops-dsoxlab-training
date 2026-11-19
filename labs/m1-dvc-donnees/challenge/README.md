@@ -1,4 +1,4 @@
-# Scenario
+# Challenge: Scenario
 
 Last week someone reran the metrics generator onto the same
 `data/metriques.csv`. The previous dataset (seed 42) is lost, and the model
@@ -14,3 +14,9 @@ separate commits, with the data in the bucket. A fresh clone must restore the
 current dataset (seed 43) with `dvc pull`, and going back to the first commit
 must restore the seed 42 dataset, byte for byte. The repository stays clean and
 the remote configuration travels with it, not the keys.
+
+## Check your work
+
+```bash
+dsoxlab check m1-dvc-donnees
+```

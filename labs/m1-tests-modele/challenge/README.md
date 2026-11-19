@@ -1,4 +1,4 @@
-# Scenario
+# Challenge: Scenario
 
 The latency model is promoted when its RMSE "looks fine", on a CSV nobody
 inspects. Two incidents already happened: a column renamed upstream, and
@@ -28,3 +28,9 @@ In the work directory (`uv sync`, then create `data/` and generate
    (`casse-schema.csv`, `casse-bornes.csv` and a valid one) and its own models
    (good, too weak, worse than the champion): it must pass on the valid ones
    and fail (tests failing, exit code 1) on the others.
+
+## Check your work
+
+```bash
+dsoxlab check m1-tests-modele
+```
